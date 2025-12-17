@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Games - Landing 3</title>
+<style>
+body { margin:0; font-family:'Courier New',Courier,monospace; background:#000; color:#00ff00; }
+a { color:#00ff00; text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+.top-banner { background:#00aa00; color:#fff; text-align:center; padding:10px; font-weight:bold; }
+header { background:#001100; padding:20px; text-align:center; font-size:2em; letter-spacing:2px; }
+nav { display:flex; justify-content:center; gap:30px; background:#002200; padding:10px 0; }
+section { padding:40px; max-width:900px; margin:auto; }
+h1,h2 { text-shadow:0 0 5px #00ff00; }
+
+.game-button { display:inline-block; margin:20px; padding:15px 25px; border:1px solid #00ff00; background:#002200; color:#00ff00; cursor:pointer; font-family:'Courier New',Courier,monospace; font-size:1.1em; }
+.game-button:hover { background:#004400; }
+
+.glitch { color:#00ff00; position:relative; display:inline-block; }
+.glitch::before, .glitch::after { content:attr(data-text); position:absolute; left:0; top:0; opacity:0.8; clip:rect(0,900px,0,0); }
+.glitch::before { animation: glitchTop 2s infinite linear alternate-reverse; color:#00ff99; }
+.glitch::after { animation: glitchBottom 2s infinite linear alternate-reverse; color:#009900; }
+
+@keyframes glitchTop { 0% {clip:rect(0,900px,5px,0);transform:translate(-2px,-2px);} 25% {clip:rect(5px,900px,10px,0);transform:translate(2px,2px);} 50% {clip:rect(0,900px,5px,0);transform:translate(-2px,0);} 75% {clip:rect(5px,900px,10px,0);transform:translate(2px,-2px);} 100% {clip:rect(0,900px,5px,0);transform:translate(0,2px);} }
+@keyframes glitchBottom { 0% {clip:rect(10px,900px,15px,0);transform:translate(2px,2px);} 25% {clip:rect(15px,900px,20px,0);transform:translate(-2px,-2px);} 50% {clip:rect(10px,900px,15px,0);transform:translate(2px,0);} 75% {clip:rect(15px,900px,20px,0);transform:translate(-2px,2px);} 100% {clip:rect(10px,900px,15px,0);transform:translate(0,-2px);} }
+
+footer { text-align:center; padding:20px; background:#001100; font-size:0.9em; }
+</style>
+</head>
+<body>
+
+<div class="top-banner">⚡ Games/Tools ⚡</div>
+
+<header>
+  <span class="glitch" data-text="GAMES/TOOLS">GAMES/TOOLS</span>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="page1.html">Blog</a>
+  <a href="page2.html">Downloads</a>
+  <a href="page3.html">Games/Tools</a>
+</nav>
+
+<section>
+  <button class="game-button" onclick="window.location.href='games/clicker.html'">Clicker game(BETA!!)</button>
+  <button class="game-button" onclick="window.location.href='games/snake.html'">Snake</button>
+  <button class="game-button" onclick="window.location.href='games/3d-rubiks-cube.html'">3D Rubiks cube (BETA!!!)</button>
+  <button class="game-button" onclick="window.location.href='tools/rng.html'">Random number generator</button>
+  <button class="game-button" onclick="window.location.href='tools/text-reverser.html'">Text reverser</button>
+</section>
+
+<footer>
+  &copy; Jakub
+</footer>
+
+</body>
+</html>
