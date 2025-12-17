@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clicker Game</title>
+<style>
+body { background:black; color:#00ff00; font-family:system-ui; text-align:center; padding:50px; }
+button { font-size:20px; padding:10px 20px; margin-top:20px; background:transparent; border:2px solid #00ff00; color:#00ff00; border-radius:8px; cursor:pointer; }
+button:hover { filter: brightness(1.2); }
+</style>
+</head>
+<body>
+<h1>Clicker Game</h1>
+<p>Points: <span id="points">0</span></p>
+<button id="clickBtn">Click me!</button>
+
+<script>
+let points = 0;
+const pointsEl = document.getElementById('points');
+const btn = document.getElementById('clickBtn');
+
+btn.addEventListener('click', () => {
+    points++;
+    pointsEl.textContent = points;
+});
+</script>
+</body>
+</html>

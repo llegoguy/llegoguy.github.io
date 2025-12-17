@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>3D Rubik's Cube</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #0f0f0f;
+  font-family: sans-serif;
+}
+#ui {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+button {
+  background: #222;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+button:hover { background: #333; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui"></div>
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script>
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio || 1);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0f0f0f);
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(5, 5, 6);
+camera.lookAt(0, 0, 0);
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const light = new THREE.DirectionalLight(0xffffff, 0.6);
+light.position.set(5, 10, 7);
+scene.add(light);
+
+const COLORS = { U: 0xffffff, D: 0xffff00, F: 0x00ff00, B: 0x0000ff, L: 0xff8000, R: 0xff0000 };
+
+const cubelets = [];
+const cubeGroup = new THREE.Group();
+scene.add(cubeGroup);
+
+function makeCubelet(x, y, z) {
+  const materials = [
+    new THREE.MeshStandardMaterial({ color: x === 1 ? COLORS.R : 0x111111 }),
+    new THREE.MeshStandardMaterial({ color: x === -1 ? COLORS.L : 0x111111 }),
+    new THREE.MeshStandardMaterial({ color: y === 1 ? COLORS.U : 0x111111 }),
+    new THREE.MeshStandardMaterial({ color: y === -1 ? COLORS.D : 0x111111 }),
+    new THREE.MeshStandardMaterial({ color: z === 1 ? COLORS.F : 0x111111 }),
+    new THREE.MeshStandardMaterial({ color: z === -1 ? COLORS.B : 0x111111 })
+  ];
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.98, 0.98, 0.98), materials);
+  mesh.position.set(x, y, z);
+  mesh.userData.cubePosition = new THREE.Vector3(x, y, z);
+  cubeGroup.add(mesh);
+  cubelets.push(mesh);
+}
+
+for (let x = -1; x <= 1; x++)
+  for (let y = -1; y <= 1; y++)
+    for (let z = -1; z <= 1; z++)
+      makeCubelet(x, y, z);
+
+let animating = false;
+
+function snap(v) { return Math.round(v); }
+
+function rotateLayer(axis, layer, dir) {
+  if (animating) return;
+  animating = true;
+
+  const tempGroup = new THREE.Group();
+  cubeGroup.add(tempGroup);
+
+  const selected = cubelets.filter(c => snap(c.userData.cubePosition[axis]) === layer);
+  selected.forEach(c => tempGroup.attach(c));
+
+  const target = dir * Math.PI / 2;
+  let angle = 0;
+  const speed = dir * Math.PI / 30;
+
+  function animate() {
+    angle += speed;
+    if (Math.abs(angle) >= Math.abs(target)) angle = target;
+    tempGroup.rotation[axis] = angle;
+
+    if (angle === target) {
+      tempGroup.updateMatrixWorld(true);
+      selected.forEach(c => {
+        const worldMatrix = new THREE.Matrix4().multiplyMatrices(tempGroup.matrixWorld, c.matrix);
+        const pos = new THREE.Vector3();
+        const quat = new THREE.Quaternion();
+        const scale = new THREE.Vector3();
+        worldMatrix.decompose(pos, quat, scale);
+        const snapped = new THREE.Vector3(snap(pos.x), snap(pos.y), snap(pos.z));
+        cubeGroup.attach(c);
+        c.position.copy(snapped);
+        c.quaternion.copy(quat);
+        c.scale.copy(scale);
+        c.userData.cubePosition.copy(snapped);
+      });
+      cubeGroup.remove(tempGroup);
+      animating = false;
+      return;
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+const moves = {
+  U: () => rotateLayer('y', 1, 1),
+  D: () => rotateLayer('y', -1, -1),
+  L: () => rotateLayer('x', -1, 1),
+  R: () => rotateLayer('x', 1, -1),
+  F: () => rotateLayer('z', 1, 1),
+  B: () => rotateLayer('z', -1, -1)
+};
+
+const ui = document.getElementById('ui');
+Object.keys(moves).forEach(m => {
+  const b = document.createElement('button');
+  b.textContent = m;
+  b.onclick = moves[m];
+  ui.appendChild(b);
+});
+
+function loop() {
+  renderer.render(scene, camera);
+  requestAnimationFrame(loop);
+}
+loop();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
