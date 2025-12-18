@@ -45,23 +45,66 @@ footer { text-align:center; padding:20px; background:#001100; font-size:0.9em; }
   <a href="page3.html">Games/Tools</a>
 </nav>
 
-<section>
-  <div class="blog-post">
-    <h2>First post !!!</h2>
-    <div class="date">Dec 16, 2025</div>
-    <p>Welcome to the blog! Dont expect me to post here often.</p>
-  </div>
-  <div class="blog-post">
-    <h2>uhhh, pico computer?</h2>
-    <div class="date">Dec 17, 2025</div>
-    <p>I just ran CP/M on my raspberry pi pico. I mean, it works, but its PAINFULLY SLOW. But hey, now i can say i have a 2$ computer!<e/p>
-  </div>
+<section id="posts">
+  <p>Loading posts...</p>
 </section>
 
 <footer>
   &copy; Jakub
 </footer>
 
+<script>
+/*
+HOW THIS WORKS (zero pain, zero frameworks):
+- Posts live in a separate file: posts.json
+- To add a post: open posts.json, copy-paste one object, done.
+- Works on GitHub Pages because it's static fetch.
+*/
+
+fetch('posts.json')
+  .then(r => r.json())
+  .then(posts => {
+    const container = document.getElementById('posts');
+    container.innerHTML = '';
+
+    // newest first
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    for (const post of posts) {
+      const div = document.createElement('div');
+      div.className = 'blog-post';
+      div.innerHTML = `
+        <h2>${post.title}</h2>
+        <div class="date">${post.date}</div>
+        <p>${post.content}</p>
+      `;
+      container.appendChild(div);
+    }
+  })
+  .catch(err => {
+    document.getElementById('posts').innerHTML = '<p>Failed to load posts 😬</p>';
+    console.error(err);
+  });
+</script>
+
 </body>
 </html>
 
+<!--
+CREATE THIS FILE NEXT TO THIS HTML:
+
+posts.json
+
+[
+  {
+    "title": "First post !!!",
+    "date": "2025-12-16",
+    "content": "Welcome to the blog! Dont expect me to post here often."
+  },
+  {
+    "title": "uhhh, pico computer?",
+    "date": "2025-12-17",
+    "content": "I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though."
+  }
+]
+-->
