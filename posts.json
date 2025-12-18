@@ -1,10 +1,12 @@
-{
-"title": "First post !!!",
-"date": "2025-12-16",
-"content": "Welcome to the blog! Dont expect me to post here often."
-},
-{
-"title": "uhhh, pico computer?",
-"date": "2025-12-17",
-"content": "I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though."
-}
+[
+  {
+    "title": "First post !!!",
+    "date": "2025-12-16",
+    "content": "Welcome to the blog! Dont expect me to post here often."
+  },
+  {
+    "title": "uhhh, pico computer?",
+    "date": "2025-12-17",
+    "content": "I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though."
+  }
+]
