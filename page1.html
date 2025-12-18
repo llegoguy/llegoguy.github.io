@@ -55,36 +55,30 @@ footer { text-align:center; padding:20px; background:#001100; font-size:0.9em; }
 
 <script>
 fetch('posts.json')
-  .then(r => {
-    document.getElementById('posts').innerHTML =
-      '<pre>Status: ' + r.status + '</pre>';
-    return r.text();
+  .then(r => r.json())
+  .then(posts => {
+    const container = document.getElementById('posts');
+    container.innerHTML = '';
+
+    // sort newest first
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    posts.forEach(post => {
+      const postDiv = document.createElement('div');
+      postDiv.className = 'blog-post';
+      postDiv.innerHTML = `
+        <h2>${post.title}</h2>
+        <div class="date">${new Date(post.date).toLocaleDateString()}</div>
+        <p>${post.content}</p>
+      `;
+      container.appendChild(postDiv);
+    });
   })
-  .then(t => {
-    document.getElementById('posts').innerHTML +=
-      '<pre>' + t + '</pre>';
+  .catch(err => {
+    document.getElementById('posts').innerHTML = '<p>Failed to load posts 😬 Check console.</p>';
+    console.error('Error loading posts.json:', err);
   });
 </script>
 
-
 </body>
 </html>
-
-<!--
-CREATE THIS FILE NEXT TO THIS HTML:
-
-posts.json
-
-[
-  {
-    "title": "First post !!!",
-    "date": "2025-12-16",
-    "content": "Welcome to the blog! Dont expect me to post here often."
-  },
-  {
-    "title": "uhhh, pico computer?",
-    "date": "2025-12-17",
-    "content": "I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though."
-  }
-]
--->
