@@ -54,38 +54,34 @@ footer { text-align:center; padding:20px; background:#001100; font-size:0.9em; }
 </footer>
 
 <script>
-/*
-HOW THIS WORKS (zero pain, zero frameworks):
-- Posts live in a separate file: posts.json
-- To add a post: open posts.json, copy-paste one object, done.
-- Works on GitHub Pages because it's static fetch.
-*/
+const out = document.getElementById('posts');
+out.innerHTML = '<pre>Starting fetch…</pre>';
 
 fetch('posts.json')
-  .then(r => r.json())
-  .then(posts => {
-    const container = document.getElementById('posts');
-    container.innerHTML = '';
-
-    // newest first
-    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    for (const post of posts) {
-      const div = document.createElement('div');
-      div.className = 'blog-post';
-      div.innerHTML = `
-        <h2>${post.title}</h2>
-        <div class="date">${post.date}</div>
-        <p>${post.content}</p>
-      `;
-      container.appendChild(div);
-    }
+  .then(r => {
+    out.innerHTML += `<pre>HTTP status: ${r.status}</pre>`;
+    return r.text();
   })
-  .catch(err => {
-    document.getElementById('posts').innerHTML = '<p>Failed to load posts 😬</p>';
-    console.error(err);
+  .then(text => {
+    out.innerHTML += '<pre>Raw response:</pre>';
+    out.innerHTML += `<pre>${text}</pre>`;
+
+    let data;
+    try {
+      data = JSON.parse(text);
+      out.innerHTML += `<pre>Parsed OK. Type: ${Array.isArray(data) ? 'array' : typeof data}</pre>`;
+    } catch (e) {
+      out.innerHTML += `<pre>JSON PARSE ERROR: ${e}</pre>`;
+      return;
+    }
+
+    out.innerHTML += `<pre>Post count: ${data.length}</pre>`;
+  })
+  .catch(e => {
+    out.innerHTML += `<pre>FETCH ERROR: ${e}</pre>`;
   });
 </script>
+
 
 </body>
 </html>
@@ -108,3 +104,4 @@ posts.json
   }
 ]
 -->
+
