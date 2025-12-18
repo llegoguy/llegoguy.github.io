@@ -54,31 +54,15 @@ footer { text-align:center; padding:20px; background:#001100; font-size:0.9em; }
 </footer>
 
 <script>
-const out = document.getElementById('posts');
-out.innerHTML = '<pre>Starting fetch…</pre>';
-
 fetch('posts.json')
   .then(r => {
-    out.innerHTML += `<pre>HTTP status: ${r.status}</pre>`;
+    document.getElementById('posts').innerHTML =
+      '<pre>Status: ' + r.status + '</pre>';
     return r.text();
   })
-  .then(text => {
-    out.innerHTML += '<pre>Raw response:</pre>';
-    out.innerHTML += `<pre>${text}</pre>`;
-
-    let data;
-    try {
-      data = JSON.parse(text);
-      out.innerHTML += `<pre>Parsed OK. Type: ${Array.isArray(data) ? 'array' : typeof data}</pre>`;
-    } catch (e) {
-      out.innerHTML += `<pre>JSON PARSE ERROR: ${e}</pre>`;
-      return;
-    }
-
-    out.innerHTML += `<pre>Post count: ${data.length}</pre>`;
-  })
-  .catch(e => {
-    out.innerHTML += `<pre>FETCH ERROR: ${e}</pre>`;
+  .then(t => {
+    document.getElementById('posts').innerHTML +=
+      '<pre>' + t + '</pre>';
   });
 </script>
 
@@ -104,4 +88,3 @@ posts.json
   }
 ]
 -->
-
