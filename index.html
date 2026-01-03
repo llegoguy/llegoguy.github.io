@@ -104,6 +104,32 @@
     100% { clip: rect(10px, 900px, 15px, 0); transform: translate(0,-2px);}
   }
 
+  /* Intro section with GIF */
+  .intro-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .intro-text {
+    flex: 1 1 300px;
+  }
+
+  .intro-gif img {
+    max-width: 200px;
+    height: auto;
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  /* Add a little glow/bounce on hover */
+  .intro-gif img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00;
+  }
+
   footer {
     text-align: center;
     padding: 20px;
@@ -128,8 +154,15 @@
 </nav>
 
 <section>
-  <h1>Hello!</h1>
-  <p>Hey! im Jakub, also known as LLegoguy, i made this site for fun. I like Lego, computing, programming, gaming and old tech! Check out all the different tabs on this site!</p>
+  <div class="intro-container">
+    <div class="intro-text">
+      <h1>Hello!</h1>
+      <p>Hey! I'm Jakub, also known as LLegoguy. I made this site for fun. I like Lego, computing, programming, gaming, and old tech! Check out all the different tabs on this site!</p>
+    </div>
+    <div class="intro-gif">
+      <img src="mygif.gif" alt="Jakub GIF">
+    </div>
+  </div>
 </section>
 
 <footer>
@@ -138,5 +171,3 @@
 
 </body>
 </html>
-
-
