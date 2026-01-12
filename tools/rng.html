@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Number Generator</title>
+<style>
+body { background:black; color:#00ff00; font-family:system-ui; text-align:center; padding:50px; }
+input, button { font-size:18px; padding:5px 10px; margin:5px; background:transparent; border:2px solid #00ff00; color:#00ff00; border-radius:6px; }
+button:hover { filter: brightness(1.2); cursor:pointer; }
+</style>
+</head>
+<body>
+<h1>Random Number Generator</h1>
+<p>Enter min and max numbers:</p>
+<input type="number" id="min" placeholder="Min">
+<input type="number" id="max" placeholder="Max">
+<button id="genBtn">Generate</button>
+<h2 id="result"></h2>
+
+<script>
+document.getElementById('genBtn').addEventListener('click', () => {
+    const min = parseInt(document.getElementById('min').value);
+    const max = parseInt(document.getElementById('max').value);
+    if(isNaN(min) || isNaN(max) || min>max){
+        alert("Enter valid numbers!");
+        return;
+    }
+    const rand = Math.floor(Math.random()*(max-min+1))+min;
+    document.getElementById('result').textContent = "Random: " + rand;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog</title>
+<style>
+body { margin:0; font-family:'Courier New',Courier,monospace; background:#000; color:#00ff00; }
+a { color:#00ff00; text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+.top-banner { background:#00aa00; color:#fff; text-align:center; padding:10px; font-weight:bold; }
+header { background:#001100; padding:20px; text-align:center; font-size:2em; letter-spacing:2px; }
+nav { display:flex; justify-content:center; gap:30px; background:#002200; padding:10px 0; }
+section { padding:40px; max-width:900px; margin:auto; }
+h1,h2 { text-shadow:0 0 5px #00ff00; }
+
+.blog-post { margin-bottom:40px; border-bottom:1px solid #00ff00; padding-bottom:20px; }
+.blog-post h2 { margin:0 0 10px 0; }
+.blog-post .date { font-size:0.9em; color:#00cc00; margin-bottom:10px; }
+
+.glitch { color:#00ff00; position:relative; display:inline-block; }
+.glitch::before, .glitch::after { content:attr(data-text); position:absolute; left:0; top:0; opacity:0.8; clip:rect(0,900px,0,0); }
+.glitch::before { animation: glitchTop 2s infinite linear alternate-reverse; color:#00ff99; }
+.glitch::after { animation: glitchBottom 2s infinite linear alternate-reverse; color:#009900; }
+
+@keyframes glitchTop { 0% {clip:rect(0,900px,5px,0);transform:translate(-2px,-2px);} 25% {clip:rect(5px,900px,10px,0);transform:translate(2px,2px);} 50% {clip:rect(0,900px,5px,0);transform:translate(-2px,0);} 75% {clip:rect(5px,900px,10px,0);transform:translate(2px,-2px);} 100% {clip:rect(0,900px,5px,0);transform:translate(0,2px);} }
+@keyframes glitchBottom { 0% {clip:rect(10px,900px,15px,0);transform:translate(2px,2px);} 25% {clip:rect(15px,900px,20px,0);transform:translate(-2px,-2px);} 50% {clip:rect(10px,900px,15px,0);transform:translate(2px,0);} 75% {clip:rect(15px,900px,20px,0);transform:translate(-2px,2px);} 100% {clip:rect(10px,900px,15px,0);transform:translate(0,-2px);} }
+
+footer { text-align:center; padding:20px; background:#001100; font-size:0.9em; }
+</style>
+</head>
+<body>
+
+<div class="top-banner">⚡ Blog ⚡</div>
+
+<header>
+  <span class="glitch" data-text="BLOG">BLOG</span>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="page1.html">Blog</a>
+  <a href="page2.html">Downloads</a>
+  <a href="page3.html">Games/Tools</a>
+</nav>
+
+<section id="posts">
+  <p>Loading posts...</p>
+</section>
+
+<footer>
+  &copy; Jakub
+</footer>
+
+<script>
+fetch('posts.json')
+  .then(r => r.json())
+  .then(posts => {
+    const container = document.getElementById('posts');
+    container.innerHTML = '';
+
+    // sort newest first
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    posts.forEach(post => {
+      const postDiv = document.createElement('div');
+      postDiv.className = 'blog-post';
+      postDiv.innerHTML = `
+        <h2>${post.title}</h2>
+        <div class="date">${new Date(post.date).toLocaleDateString()}</div>
+        <p>${post.content}</p>
+      `;
+      container.appendChild(postDiv);
+    });
+  })
+  .catch(err => {
+    document.getElementById('posts').innerHTML = '<p>Failed to load posts 😬 Check console.</p>';
+    console.error('Error loading posts.json:', err);
+  });
+</script>
+
+</body>
+</html>
