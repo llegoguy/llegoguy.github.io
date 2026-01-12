@@ -89,22 +89,22 @@
   }
 
   @keyframes glitchTop {
-    0% { clip: rect(0, 900px, 5px, 0); transform: translate(-2px,-2px);}
-    25% { clip: rect(5px, 900px, 10px, 0); transform: translate(2px,2px);}
-    50% { clip: rect(0, 900px, 5px, 0); transform: translate(-2px,0);}
-    75% { clip: rect(5px, 900px, 10px, 0); transform: translate(2px,-2px);}
-    100% { clip: rect(0, 900px, 5px, 0); transform: translate(0,2px);}
+    0% { clip: rect(0, 900px, 5px, 0); transform: translate(-2px,-2px);} 
+    25% { clip: rect(5px, 900px, 10px, 0); transform: translate(2px,2px);} 
+    50% { clip: rect(0, 900px, 5px, 0); transform: translate(-2px,0);} 
+    75% { clip: rect(5px, 900px, 10px, 0); transform: translate(2px,-2px);} 
+    100% { clip: rect(0, 900px, 5px, 0); transform: translate(0,2px);} 
   }
 
   @keyframes glitchBottom {
-    0% { clip: rect(10px, 900px, 15px, 0); transform: translate(2px,2px);}
-    25% { clip: rect(15px, 900px, 20px, 0); transform: translate(-2px,-2px);}
-    50% { clip: rect(10px, 900px, 15px, 0); transform: translate(2px,0);}
-    75% { clip: rect(15px, 900px, 20px, 0); transform: translate(-2px,2px);}
-    100% { clip: rect(10px, 900px, 15px, 0); transform: translate(0,-2px);}
+    0% { clip: rect(10px, 900px, 15px, 0); transform: translate(2px,2px);} 
+    25% { clip: rect(15px, 900px, 20px, 0); transform: translate(-2px,-2px);} 
+    50% { clip: rect(10px, 900px, 15px, 0); transform: translate(2px,0);} 
+    75% { clip: rect(15px, 900px, 20px, 0); transform: translate(-2px,2px);} 
+    100% { clip: rect(10px, 900px, 15px, 0); transform: translate(0,-2px);} 
   }
 
-  /* Intro section with GIF */
+  /* Intro section with GIF and profile image */
   .intro-container {
     display: flex;
     align-items: center;
@@ -116,10 +116,27 @@
     flex: 1 1 300px;
   }
 
+  .intro-gif {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex: 0 0 auto;
+  }
+
   .intro-gif img {
     max-width: 100%;
     height: auto;
     display: block;
+  }
+
+  /* Optional: constrain each image size for better layout */
+  .intro-gif img.profile {
+    max-width: 220px;
+    border-radius: 6px;
+  }
+
+  .intro-gif img.animation {
+    max-width: 260px;
   }
 
   footer {
@@ -149,10 +166,11 @@
   <div class="intro-container">
     <div class="intro-text">
       <h1>Hello!</h1>
-      <p>Hey! I'm Jakub, also known as LLegoguy. I made this site for fun. I like Lego, computing, programming, gaming, mario, minecraft, and old tech! Check out all the different tabs on this site!</p>
+      <p>Hey! I'm Jakub, also known as LLegoguy. I made this site for fun. I like Lego, computing, programming, gaming, mario, minecraft, and old tech! Check out all the different tabs on this site![...]
     </div>
     <div class="intro-gif">
-      <img src="bricksanim.gif" alt="lego brick animation">
+      <img src="bricksanim.gif" alt="lego brick animation" class="animation">
+      <img src="llegoguy.png" alt="llegoguy profile" class="profile">
     </div>
   </div>
 </section>
@@ -163,6 +181,3 @@
 
 </body>
 </html>
-
-
-
