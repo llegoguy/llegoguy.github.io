@@ -1,22 +1,18 @@
 [
   {
-    "title": "First post !!!",
-    "date": "2025-12-16",
-    "content": "Welcome to the blog! Dont expect me to post here often."
+    "title": "Welcome — First post",
+    "date": "2026-01-10T12:00:00Z",
+    "author": "LLegoguy",
+    "excerpt": "This is the first post on the new Posts page. More content coming soon!",
+    "content": "This is the full content of the first post. You can expand this and link to a dedicated page if you want.",
+    "url": ""
   },
   {
-    "title": "uhhh, pico computer?",
-    "date": "2025-12-17",
-    "content": "I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though."
-  },
-  {
-    "title": "NEW GAME!!!!1",
-    "date": "2025-12-18",
-    "content": "NEW game: Dodge the squares is OUT on the Games/Tools tab! GO CHECK IT OUT!!"
-  },
-  {
-    "title": "MERRY CHRISTMAS!",
-    "date": "2025-12-24",
-    "content": "Merry Christmas everyone!!!"
+    "title": "New toys: Lego haul",
+    "date": "2026-01-05T09:30:00Z",
+    "author": "LLegoguy",
+    "excerpt": "I got a new lego set and some parts — here's a quick write-up.",
+    "content": "I love Lego. I recently bought... (expand this into a full post page later)",
+    "url": ""
   }
 ]
