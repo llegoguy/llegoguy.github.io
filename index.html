@@ -59,12 +59,17 @@
       box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     }
 
+    /* Make the content area a column flex container and use a black background so
+       there is no white gap at the bottom on mobile. */
     .content {
       flex: 1;
       padding: 5px; /* Reduced from 20px to minimize whitespace */
-      background-color: #ffffff;
+      background-color: #000000; /* changed from white to black to avoid white gap */
       overflow: auto;
       border: none; /* Removed inset border for cleaner look */
+      display: flex;
+      flex-direction: column;
+      min-height: 0; /* allow proper flexbox scrolling on mobile */
     }
 
     .status-bar {
@@ -80,9 +85,12 @@
     .xp-content {
       margin: 0; /* Removed margin to prevent double spacing */
       font-family: 'Courier New', Courier, monospace;
-      background-color: #000;
+      background-color: #000; /* keep black background */
       color: #00ff00;
-      height: calc(100% - 42px); /* Account for title bar and status bar */
+      /* Use flex so this element fills the content area reliably on mobile */
+      flex: 1;
+      min-height: 0; /* important for proper scrolling inside flex containers */
+      display: block;
     }
 
     .xp-content a {
@@ -230,11 +238,11 @@
           <div class="intro-container">
             <div class="intro-text">
               <h1>Hello!</h1>
-              <p>Hey! I'm Jakub, also known as LLegoguy. I made this site for fun. I like Lego, computing, programming, gaming, mario, minecraft, and old tech! Check out all the different tabs on this site!
+              <p>Hey! I'm Jakub, also known as LLegoguy. I made this site for fun. I like Lego, computing, programming, gaming, mario, minecraft, and old tech! Check out all the different tabs on[...]
             </div>
             <div class="intro-gif">
               <img src="bricksanim.gif" alt="lego brick animation" class="animation">
-              <img src="llegoguy.png" alt="llegoguy profile" class="profile">
+              <img src="llegoguy-in-paint-window.png" alt="llegoguy profile" class="profile">
             </div>
           </div>
         </section>
@@ -246,4 +254,3 @@
   </div>
 </body>
 </html>
-
