@@ -6,13 +6,53 @@
 <title>Snake Game</title>
 <style>
 body { background:black; color:#00ff00; font-family:system-ui; text-align:center; }
-canvas { background:#000; display:block; margin:50px auto; border:2px solid #00ff00; }
+canvas { background:#000; display:block; margin:20px auto; border:2px solid #00ff00; }
+
+/* Button styles */
+.button-container {
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin-bottom:20px;
+}
+.button {
+  background:#333;
+  color:#00ff00;
+  border:2px solid #00ff00;
+  width:60px;
+  height:60px;
+  font-size:24px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.1s;
+}
+.button:hover {
+  background:#444;
+  box-shadow:0 0 8px #00ff00;
+}
+.button.pressed {
+  transform:scale(0.9);
+  box-shadow:inset 0 0 5px #00ff00;
+}
 </style>
 </head>
 <body>
 <h1>Snake Game</h1>
 <canvas id="game" width="400" height="400"></canvas>
-<p>Use arrow keys to move</p>
+
+<div class="button-container">
+  <button class="button up" data-dir="UP">↑</button>
+  <br>
+  <div style="display:flex; gap:20px;">
+    <button class="button left" data-dir="LEFT">←</button>
+    <button class="button right" data-dir="RIGHT">→</button>
+  </div>
+  <button class="button down" data-dir="DOWN">↓</button>
+</div>
+
+<p>Use arrow buttons or keys to move</p>
 
 <script>
 const canvas = document.getElementById('game');
@@ -24,6 +64,37 @@ let food = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)
 let dir;
 let score = 0;
 
+// Button event listeners
+document.querySelectorAll('.button').forEach(button => {
+  button.addEventListener('mousedown', e => {
+    const direction = button.getAttribute('data-dir');
+    if (dir !== getOppositeDir(direction)) {
+      dir = direction;
+      button.classList.add('pressed');
+    }
+  });
+  button.addEventListener('mouseup', e => {
+    button.classList.remove('pressed');
+  });
+  // Optional: tap to move like a joystick
+  button.addEventListener('click', e => {
+    const direction = button.getAttribute('data-dir');
+    if (dir !== getOppositeDir(direction)) {
+      dir = direction;
+    }
+  });
+});
+
+function getOppositeDir(dir) {
+  switch(dir) {
+    case 'UP': return 'DOWN';
+    case 'DOWN': return 'UP';
+    case 'LEFT': return 'RIGHT';
+    case 'RIGHT': return 'LEFT';
+  }
+}
+
+// Keyboard controls still work
 document.addEventListener('keydown', e => {
   if(e.key === 'ArrowUp' && dir !== 'DOWN') dir='UP';
   if(e.key === 'ArrowDown' && dir !== 'UP') dir='DOWN';
@@ -35,11 +106,13 @@ function draw() {
   ctx.fillStyle='black';
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
+  // Draw snake
   for(let i=0;i<snake.length;i++){
     ctx.fillStyle = (i===0)? '#0f0' : '#00ff00';
     ctx.fillRect(snake[i].x, snake[i].y, box, box);
   }
 
+  // Draw food
   ctx.fillStyle='red';
   ctx.fillRect(food.x, food.y, box, box);
 
@@ -51,6 +124,7 @@ function draw() {
   if(dir==='LEFT') headX -= box;
   if(dir==='RIGHT') headX += box;
 
+  // Check food collision
   if(headX===food.x && headY===food.y){
     score++;
     food = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)*box};
@@ -60,12 +134,24 @@ function draw() {
 
   let newHead = {x: headX, y: headY};
 
-  if(snake.some(seg => seg.x===headX && seg.y===headY) || headX<0 || headY<0 || headX>=canvas.width || headY>=canvas.height){
+  // Check game over conditions
+  if(snake.some(seg => seg.x===headX && seg.y===headY) ||
+     headX<0 || headY<0 || headX>=canvas.width || headY>=canvas.height){
     alert('Game Over! Score: '+score);
     snake=[{x: 8*box, y: 8*box}]; score=0; dir=undefined;
   }
 
   snake.unshift(newHead);
+
+  // Update button states
+  document.querySelectorAll('.button').forEach(button => {
+    const isActive = dir === button.getAttribute('data-dir');
+    if (isActive) {
+      button.classList.add('pressed');
+    } else {
+      button.classList.remove('pressed');
+    }
+  });
 }
 
 setInterval(draw, 100);
