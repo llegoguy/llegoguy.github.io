@@ -8,11 +8,11 @@
 body { background:black; color:#00ff00; font-family:system-ui; text-align:center; }
 canvas { background:#000; display:block; margin:20px auto; border:2px solid #00ff00; }
 
-/* D-Pad styles - now with proper retro console styling */
+/* Fixed D-Pad that actually works */
 .dpad-container {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   display: flex;
   justify-content: center;
   margin: 20px auto;
@@ -57,32 +57,22 @@ canvas { background:#000; display:block; margin:20px auto; border:2px solid #00f
     inset 1px 1px 0 #003300;
 }
 
-/* Position the buttons to form a D-pad */
+/* Position buttons properly */
 .up {
   top: 5px;
-  left: 42.5px;
+  left: 52.5px; /* (150-40)/2 = 55, but centered at 52.5 to account for shadow */
 }
 .down {
   bottom: 5px;
-  left: 42.5px;
+  left: 52.5px;
 }
 .left {
-  left: 10px;
-  top: 37.5px;
-  transform: rotate(-90deg);
-  width: 60px;
-  height: 20px;
-  padding-right: 8px !important;
-  border-radius: 4px 6px 6px 4px !important;
+  top: 52.5px;
+  left: 5px;
 }
 .right {
-  right: 10px;
-  top: 37.5px;
-  transform: rotate(90deg);
-  width: 60px;
-  height: 20px;
-  padding-left: 8px !important;
-  border-radius: 6px 4px 4px 6px !important;
+  top: 52.5px;
+  right: 5px;
 }
 </style>
 </head>
@@ -101,28 +91,112 @@ canvas { background:#000; display:block; margin:20px auto; border:2px solid #00f
 <p>Use D-pad buttons or arrow keys to move</p>
 
 <script>
-// [Previous snake game code remains exactly the same until the button event listeners]
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+const box = 20;
+let snake = [{x: 8*box, y: 8*box}];
+let food = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)*box};
+let dir;
+let score = 0;
+
+// Fixed button event listeners
 document.querySelectorAll('.dpad-button').forEach(button => {
+  let isDown = false;
+
   button.addEventListener('mousedown', e => {
     const direction = button.getAttribute('data-dir');
     if (dir !== getOppositeDir(direction)) {
       dir = direction;
       button.classList.add('pressed');
-      // Add a little "click" sound effect
-      document.body.play();
+      isDown = true;
     }
   });
+
   button.addEventListener('mouseup', e => {
-    button.classList.remove('pressed');
+    if (isDown) {
+      button.classList.remove('pressed');
+      isDown = false;
+    }
   });
+
   button.addEventListener('mouseleave', e => {
-    if (!button.classList.contains('pressed')) {
+    if (!isDown) {
       button.classList.remove('pressed');
     }
   });
 });
 
-// [Rest of the snake game code remains unchanged]
+// Keyboard controls
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowUp' && dir !== 'DOWN') dir='UP';
+  if(e.key === 'ArrowDown' && dir !== 'UP') dir='DOWN';
+  if(e.key === 'ArrowLeft' && dir !== 'RIGHT') dir='LEFT';
+  if(e.key === 'ArrowRight' && dir !== 'LEFT') dir='RIGHT';
+});
+
+function getOppositeDir(dir) {
+  switch(dir) {
+    case 'UP': return 'DOWN';
+    case 'DOWN': return 'UP';
+    case 'LEFT': return 'RIGHT';
+    case 'RIGHT': return 'LEFT';
+  }
+}
+
+function draw() {
+  ctx.fillStyle='black';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  // Draw snake
+  for(let i=0;i<snake.length;i++){
+    ctx.fillStyle = (i===0)? '#0f0' : '#00ff00';
+    ctx.fillRect(snake[i].x, snake[i].y, box, box);
+  }
+
+  // Draw food
+  ctx.fillStyle='red';
+  ctx.fillRect(food.x, food.y, box, box);
+
+  let headX = snake[0].x;
+  let headY = snake[0].y;
+
+  if(dir==='UP') headY -= box;
+  if(dir==='DOWN') headY += box;
+  if(dir==='LEFT') headX -= box;
+  if(dir==='RIGHT') headX += box;
+
+  // Check food collision
+  if(headX===food.x && headY===food.y){
+    score++;
+    food = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)*box};
+  } else {
+    snake.pop();
+  }
+
+  let newHead = {x: headX, y: headY};
+
+  // Check game over conditions
+  if(snake.some(seg => seg.x===headX && seg.y===headY) ||
+     headX<0 || headY<0 || headX>=canvas.width || headY>=canvas.height){
+    alert('Game Over! Score: '+score);
+    snake=[{x: 8*box, y: 8*box}]; score=0; dir=undefined;
+  }
+
+  snake.unshift(newHead);
+
+  // Update button states
+  document.querySelectorAll('.dpad-button').forEach(button => {
+    const isActive = dir === button.getAttribute('data-dir');
+    if (isActive) {
+      button.classList.add('pressed');
+    } else {
+      button.classList.remove('pressed');
+    }
+  });
+}
+
+setInterval(draw, 100);
 </script>
 </body>
 </html>
