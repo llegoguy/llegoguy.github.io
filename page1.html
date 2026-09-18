@@ -214,7 +214,35 @@
         </nav>
 
         <section id="posts">
-          <p>Loading posts...</p>
+          <article class="blog-post">
+            <h2>New site style!!</h2>
+            <div class="date">1/28/2026</div>
+            <p>Have you seen the new windows xp inspired website border?</p>
+          </article>
+
+          <article class="blog-post">
+            <h2>MERRY CHRISTMAS!</h2>
+            <div class="date">12/24/2025</div>
+            <p>Merry Christmas everyone!!!</p>
+          </article>
+
+          <article class="blog-post">
+            <h2>NEW GAME!!!!1</h2>
+            <div class="date">12/18/2025</div>
+            <p>NEW game: Dodge the squares is OUT on the Games/Tools tab! GO CHECK IT OUT!!</p>
+          </article>
+
+          <article class="blog-post">
+            <h2>uhhh, pico computer?</h2>
+            <div class="date">12/17/2025</div>
+            <p>I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though.</p>
+          </article>
+
+          <article class="blog-post">
+            <h2>First post !!!</h2>
+            <div class="date">12/16/2025</div>
+            <p>Welcome to the blog! Dont expect me to post here often.</p>
+          </article>
         </section>
 
         <footer>
@@ -225,35 +253,5 @@
 
     <div class="status-bar">Ready</div>
   </div>
-
-  <!-- Your original JavaScript -->
-  <script>
-    fetch('posts.json')
-      .then(r => r.json())
-      .then(posts => {
-        const container = document.getElementById('posts');
-        container.innerHTML = '';
-
-        // sort newest first
-        posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        posts.forEach(post => {
-          const postDiv = document.createElement('div');
-          postDiv.className = 'blog-post';
-          postDiv.innerHTML = `
-            <h2>${post.title}</h2>
-            <div class="date">${new Date(post.date).toLocaleDateString()}</div>
-            <p>${post.content}</p>
-          `;
-          container.appendChild(postDiv);
-        });
-      })
-      .catch(err => {
-        document.getElementById('posts').innerHTML = '<p>Failed to load posts 😬 Check console.</p>';
-        console.error('Error loading posts.json:', err);
-      });
-  </script>
 </body>
 </html>
-
-
