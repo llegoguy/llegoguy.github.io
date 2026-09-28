@@ -95,10 +95,50 @@
       text-shadow: 0 0 5px #00ff00;
     }
 
+    .search-container {
+      margin-bottom: 30px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-container label {
+      font-size: 1em;
+    }
+
+    .search-container input {
+      flex: 1;
+      max-width: 300px;
+      padding: 8px 12px;
+      background: #001100;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1em;
+    }
+
+    .search-container input::placeholder {
+      color: #006600;
+    }
+
+    .search-container input:focus {
+      outline: none;
+      box-shadow: 0 0 5px #00ff00;
+    }
+
+    .search-results-count {
+      font-size: 0.9em;
+      color: #00cc00;
+    }
+
     .blog-post {
       margin-bottom: 40px;
       border-bottom: 1px solid #00ff00;
       padding-bottom: 20px;
+    }
+
+    .blog-post.hidden {
+      display: none;
     }
 
     .blog-post h2 {
@@ -140,6 +180,13 @@
       /* Your existing keyframes */
     }
 
+    .no-results {
+      text-align: center;
+      color: #00cc00;
+      font-size: 1.1em;
+      margin: 40px 0;
+    }
+
     footer {
       text-align: center;
       padding: 20px;
@@ -164,48 +211,65 @@
         <a href="page3.html">Games/Tools</a>
       </nav>
 
-      <section id="posts">
-        <article class="blog-post">
-          <h2>PAGE look UPDATE</h2>
-          <div class="date">9/28/2026</div>
-          <p>Yo every1 quick update, i removed the xp page border, it was too messy adn didnt work on mobile :/, but imo it looks cleaner now!.</p>
-        </article>
-        
-        <article class="blog-post">
-          <h2>got a cardputer!</h2>
-          <div class="date">9/18/2026</div>
-          <p>Recently got an m5 cardputer ADV! pretty neat gadget IMO done a lot of useful things so far!</p>
-        </article>
-        
-        <article class="blog-post">
-          <h2>New site style!!</h2>
-          <div class="date">1/28/2026</div>
-          <p>Have you seen the new windows xp inspired website border?</p>
-        </article>
+      <section>
+        <div class="search-container">
+          <label for="search-input">Search posts:</label>
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Enter search query..." 
+            onkeyup="filterPosts()"
+          >
+          <span class="search-results-count" id="results-count"></span>
+        </div>
 
-        <article class="blog-post">
-          <h2>MERRY CHRISTMAS!</h2>
-          <div class="date">12/24/2025</div>
-          <p>Merry Christmas everyone!!!</p>
-        </article>
+        <div id="posts">
+          <article class="blog-post">
+            <h2>PAGE look UPDATE</h2>
+            <div class="date">9/28/2026</div>
+            <p>Yo every1 quick update, i removed the xp page border, it was too messy adn didnt work on mobile :/, but imo it looks cleaner now!.</p>
+          </article>
+          
+          <article class="blog-post">
+            <h2>got a cardputer!</h2>
+            <div class="date">9/18/2026</div>
+            <p>Recently got an m5 cardputer ADV! pretty neat gadget IMO done a lot of useful things so far!</p>
+          </article>
+          
+          <article class="blog-post">
+            <h2>New site style!!</h2>
+            <div class="date">1/28/2026</div>
+            <p>Have you seen the new windows xp inspired website border?</p>
+          </article>
 
-        <article class="blog-post">
-          <h2>NEW GAME!!!!1</h2>
-          <div class="date">12/18/2025</div>
-          <p>NEW game: Dodge the squares is OUT on the Games/Tools tab! GO CHECK IT OUT!!</p>
-        </article>
+          <article class="blog-post">
+            <h2>MERRY CHRISTMAS!</h2>
+            <div class="date">12/24/2025</div>
+            <p>Merry Christmas everyone!!!</p>
+          </article>
 
-        <article class="blog-post">
-          <h2>uhhh, pico computer?</h2>
-          <div class="date">12/17/2025</div>
-          <p>I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though.</p>
-        </article>
+          <article class="blog-post">
+            <h2>NEW GAME!!!!1</h2>
+            <div class="date">12/18/2025</div>
+            <p>NEW game: Dodge the squares is OUT on the Games/Tools tab! GO CHECK IT OUT!!</p>
+          </article>
 
-        <article class="blog-post">
-          <h2>First post !!!</h2>
-          <div class="date">12/16/2025</div>
-          <p>Welcome to the blog! Dont expect me to post here often.</p>
-        </article>
+          <article class="blog-post">
+            <h2>uhhh, pico computer?</h2>
+            <div class="date">12/17/2025</div>
+            <p>I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though.</p>
+          </article>
+
+          <article class="blog-post">
+            <h2>First post !!!</h2>
+            <div class="date">12/16/2025</div>
+            <p>Welcome to the blog! Dont expect me to post here often.</p>
+          </article>
+        </div>
+
+        <div class="no-results" id="no-results" style="display: none;">
+          No posts match your search query.
+        </div>
       </section>
 
       <footer>
@@ -213,5 +277,41 @@
       </footer>
     </div>
   </div>
+
+  <script>
+    function filterPosts() {
+      const searchInput = document.getElementById('search-input').value.toLowerCase();
+      const posts = document.querySelectorAll('.blog-post');
+      const noResults = document.getElementById('no-results');
+      let visibleCount = 0;
+
+      posts.forEach(post => {
+        const title = post.querySelector('h2').textContent.toLowerCase();
+        const content = post.textContent.toLowerCase();
+        
+        if (title.includes(searchInput) || content.includes(searchInput)) {
+          post.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          post.classList.add('hidden');
+        }
+      });
+
+      // Show/hide "no results" message
+      if (visibleCount === 0 && searchInput !== '') {
+        noResults.style.display = 'block';
+      } else {
+        noResults.style.display = 'none';
+      }
+
+      // Update results count
+      const resultsCount = document.getElementById('results-count');
+      if (searchInput === '') {
+        resultsCount.textContent = '';
+      } else {
+        resultsCount.textContent = `(${visibleCount} result${visibleCount !== 1 ? 's' : ''})`;
+      }
+    }
+  </script>
 </body>
 </html>
