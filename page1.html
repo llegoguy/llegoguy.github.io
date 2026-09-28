@@ -98,8 +98,15 @@
     .search-container {
       margin-bottom: 30px;
       display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .search-row {
+      display: flex;
       gap: 10px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .search-container label {
@@ -107,14 +114,28 @@
     }
 
     .search-container input {
-      flex: 1;
-      max-width: 300px;
       padding: 8px 12px;
       background: #001100;
       color: #00ff00;
       border: 1px solid #00ff00;
       font-family: 'Courier New', Courier, monospace;
       font-size: 1em;
+    }
+
+    #search-input {
+      flex: 1;
+      max-width: 300px;
+    }
+
+    .date-inputs {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    #start-date, #end-date {
+      max-width: 150px;
     }
 
     .search-container input::placeholder {
@@ -213,54 +234,72 @@
 
       <section>
         <div class="search-container">
-          <label for="search-input">Search posts:</label>
-          <input 
-            type="text" 
-            id="search-input" 
-            placeholder="Enter search query..." 
-            onkeyup="filterPosts()"
-          >
-          <span class="search-results-count" id="results-count"></span>
+          <div class="search-row">
+            <label for="search-input">Search posts:</label>
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="Enter search query..." 
+              onkeyup="filterPosts()"
+            >
+            <span class="search-results-count" id="results-count"></span>
+          </div>
+
+          <div class="date-inputs">
+            <label for="start-date">From:</label>
+            <input 
+              type="date" 
+              id="start-date" 
+              onchange="filterPosts()"
+            >
+            <label for="end-date">To:</label>
+            <input 
+              type="date" 
+              id="end-date" 
+              onchange="filterPosts()"
+            >
+            <button onclick="clearFilters()" style="background: #002200; color: #00ff00; border: 1px solid #00ff00; padding: 8px 15px; cursor: pointer; font-family: 'Courier New', Courier, monospace;">Clear</button>
+          </div>
         </div>
 
         <div id="posts">
-          <article class="blog-post">
+          <article class="blog-post" data-date="2026-09-28">
             <h2>PAGE look UPDATE</h2>
             <div class="date">9/28/2026</div>
             <p>Yo every1 quick update, i removed the xp page border, it was too messy adn didnt work on mobile :/, but imo it looks cleaner now!.</p>
           </article>
           
-          <article class="blog-post">
+          <article class="blog-post" data-date="2026-09-18">
             <h2>got a cardputer!</h2>
             <div class="date">9/18/2026</div>
             <p>Recently got an m5 cardputer ADV! pretty neat gadget IMO done a lot of useful things so far!</p>
           </article>
           
-          <article class="blog-post">
+          <article class="blog-post" data-date="2026-01-28">
             <h2>New site style!!</h2>
             <div class="date">1/28/2026</div>
             <p>Have you seen the new windows xp inspired website border?</p>
           </article>
 
-          <article class="blog-post">
+          <article class="blog-post" data-date="2025-12-24">
             <h2>MERRY CHRISTMAS!</h2>
             <div class="date">12/24/2025</div>
             <p>Merry Christmas everyone!!!</p>
           </article>
 
-          <article class="blog-post">
+          <article class="blog-post" data-date="2025-12-18">
             <h2>NEW GAME!!!!1</h2>
             <div class="date">12/18/2025</div>
             <p>NEW game: Dodge the squares is OUT on the Games/Tools tab! GO CHECK IT OUT!!</p>
           </article>
 
-          <article class="blog-post">
+          <article class="blog-post" data-date="2025-12-17">
             <h2>uhhh, pico computer?</h2>
             <div class="date">12/17/2025</div>
             <p>I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though.</p>
           </article>
 
-          <article class="blog-post">
+          <article class="blog-post" data-date="2025-12-16">
             <h2>First post !!!</h2>
             <div class="date">12/16/2025</div>
             <p>Welcome to the blog! Dont expect me to post here often.</p>
@@ -268,7 +307,7 @@
         </div>
 
         <div class="no-results" id="no-results" style="display: none;">
-          No posts match your search query.
+          No posts match your filters.
         </div>
       </section>
 
@@ -281,6 +320,8 @@
   <script>
     function filterPosts() {
       const searchInput = document.getElementById('search-input').value.toLowerCase();
+      const startDate = document.getElementById('start-date').value;
+      const endDate = document.getElementById('end-date').value;
       const posts = document.querySelectorAll('.blog-post');
       const noResults = document.getElementById('no-results');
       let visibleCount = 0;
@@ -288,8 +329,21 @@
       posts.forEach(post => {
         const title = post.querySelector('h2').textContent.toLowerCase();
         const content = post.textContent.toLowerCase();
+        const postDate = post.getAttribute('data-date');
         
-        if (title.includes(searchInput) || content.includes(searchInput)) {
+        // Check text search
+        const textMatch = title.includes(searchInput) || content.includes(searchInput) || searchInput === '';
+        
+        // Check date range
+        let dateMatch = true;
+        if (startDate) {
+          dateMatch = dateMatch && postDate >= startDate;
+        }
+        if (endDate) {
+          dateMatch = dateMatch && postDate <= endDate;
+        }
+        
+        if (textMatch && dateMatch) {
           post.classList.remove('hidden');
           visibleCount++;
         } else {
@@ -298,7 +352,7 @@
       });
 
       // Show/hide "no results" message
-      if (visibleCount === 0 && searchInput !== '') {
+      if (visibleCount === 0 && (searchInput !== '' || startDate !== '' || endDate !== '')) {
         noResults.style.display = 'block';
       } else {
         noResults.style.display = 'none';
@@ -306,11 +360,18 @@
 
       // Update results count
       const resultsCount = document.getElementById('results-count');
-      if (searchInput === '') {
+      if (searchInput === '' && startDate === '' && endDate === '') {
         resultsCount.textContent = '';
       } else {
         resultsCount.textContent = `(${visibleCount} result${visibleCount !== 1 ? 's' : ''})`;
       }
+    }
+
+    function clearFilters() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('start-date').value = '';
+      document.getElementById('end-date').value = '';
+      filterPosts();
     }
   </script>
 </body>
