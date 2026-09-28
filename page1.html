@@ -5,85 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog</title>
   <style>
-    /* XP Window Styles */
     body, html {
       margin: 0;
       padding: 0;
-      height: 100%;
+      min-height: 100%;
       font-family: Tahoma, sans-serif;
-      background-color: #008080; /* Classic XP teal */
+      background-color: #000000;
+      color: #00ff00;
     }
 
     .xp-window {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 95vw;
-      height: 90vh;
-      border: 4px solid #000080; /* Dark blue border */
-      box-shadow: 6px 6px 0 #ffffff, -6px -6px 0 #c0c0c0; /* XP 3D effect */
-      background-color: #c0c0c0;
-      display: flex;
-      flex-direction: column;
+      width: 100%;
+      height: auto;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+      display: block;
     }
 
-    .title-bar {
-      background: linear-gradient(to bottom, #000080, #0000cd);
-      color: white;
-      padding: 5px 10px;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #808080;
-      flex-shrink: 0;
-    }
-
-    .title-bar-buttons span {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      margin-left: 2px;
-      text-align: center;
-      line-height: 20px;
-      background-color: #c0c0c0; /* Default gray */
-      color: black;
-      font-weight: bold;
-      border: 1px solid #808080;
-      cursor: pointer;
-    }
-
-    .title-bar-buttons span:last-child {
-      background-color: #ff0000; /* Pure red X button */
-      box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    .title-bar,
+    .title-bar-buttons,
+    .status-bar {
+      display: none !important;
     }
 
     .content {
       flex: 1;
-      padding: 5px; /* Minimal whitespace */
-      background-color: #ffffff;
-      overflow: auto;
-      border: none; /* Cleaner look */
+      padding: 0;
+      background-color: #000000;
+      overflow: visible;
+      border: none;
+      display: block;
+      min-height: 100vh;
     }
 
-    .status-bar {
-      background-color: #c0c0c0;
-      border-top: 2px solid #808080;
-      padding: 3px 10px;
-      font-size: 12px;
-      color: black;
-      flex-shrink: 0;
-    }
-
-    /* Your Original Blog Styles (Preserved) */
     .xp-content {
-      margin: 0; /* Prevent double spacing */
+      margin: 0;
       font-family: 'Courier New', Courier, monospace;
       background-color: #000;
       color: #00ff00;
-      height: calc(100% - 42px); /* Account for title bar and status bar */
-      overflow: auto; /* Add this to contain the content properly */
+      overflow: auto;
+      min-height: 100vh;
     }
 
     .xp-content a {
@@ -124,7 +86,7 @@
     }
 
     section {
-      padding: 40px; /* Keep your original padding */
+      padding: 40px;
       max-width: 900px;
       margin: auto;
     }
@@ -187,77 +149,63 @@
   </style>
 </head>
 <body>
-  <div class="xp-window">
-    <div class="title-bar">
-      <span>Blog - llegoguy.github.io</span>
-      <div class="title-bar-buttons">
-        <span>–</span>
-        <span>□</span>
-        <span>×</span>
-      </div>
+  <div class="content">
+    <div class="xp-content">
+      <div class="top-banner">⚡ Blog ⚡</div>
+
+      <header>
+        <span class="glitch" data-text="BLOG">BLOG</span>
+      </header>
+
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="page1.html">Blog</a>
+        <a href="page2.html">Downloads</a>
+        <a href="page3.html">Games/Tools</a>
+      </nav>
+
+      <section id="posts">
+        <article class="blog-post">
+          <h2>got a cardputer!</h2>
+          <div class="date">9/18/2026</div>
+          <p>Recently got an m5 cardputer ADV! pretty neat gadget IMO done a lot of useful things so far!</p>
+        </article>
+        
+        <article class="blog-post">
+          <h2>New site style!!</h2>
+          <div class="date">1/28/2026</div>
+          <p>Have you seen the new windows xp inspired website border?</p>
+        </article>
+
+        <article class="blog-post">
+          <h2>MERRY CHRISTMAS!</h2>
+          <div class="date">12/24/2025</div>
+          <p>Merry Christmas everyone!!!</p>
+        </article>
+
+        <article class="blog-post">
+          <h2>NEW GAME!!!!1</h2>
+          <div class="date">12/18/2025</div>
+          <p>NEW game: Dodge the squares is OUT on the Games/Tools tab! GO CHECK IT OUT!!</p>
+        </article>
+
+        <article class="blog-post">
+          <h2>uhhh, pico computer?</h2>
+          <div class="date">12/17/2025</div>
+          <p>I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though.</p>
+        </article>
+
+        <article class="blog-post">
+          <h2>First post !!!</h2>
+          <div class="date">12/16/2025</div>
+          <p>Welcome to the blog! Dont expect me to post here often.</p>
+        </article>
+      </section>
+
+      <footer>
+        &copy; Jakub 2026
+      </footer>
     </div>
-
-    <div class="content">
-      <div class="xp-content">
-        <!-- Your original blog content -->
-        <div class="top-banner">⚡ Blog ⚡</div>
-
-        <header>
-          <span class="glitch" data-text="BLOG">BLOG</span>
-        </header>
-
-        <nav>
-          <a href="index.html">Home</a>
-          <a href="page1.html">Blog</a>
-          <a href="page2.html">Downloads</a>
-          <a href="page3.html">Games/Tools</a>
-        </nav>
-
-        <section id="posts">
-          <article class="blog-post">
-            <h2>got a cardputer!</h2>
-            <div class="date">9/18/2026</div>
-            <p>Recently got an m5 cardputer ADV! pretty neat gadget IMO done a lot of useful things so far!</p>
-          </article>
-          
-          <article class="blog-post">
-            <h2>New site style!!</h2>
-            <div class="date">1/28/2026</div>
-            <p>Have you seen the new windows xp inspired website border?</p>
-          </article>
-
-          <article class="blog-post">
-            <h2>MERRY CHRISTMAS!</h2>
-            <div class="date">12/24/2025</div>
-            <p>Merry Christmas everyone!!!</p>
-          </article>
-
-          <article class="blog-post">
-            <h2>NEW GAME!!!!1</h2>
-            <div class="date">12/18/2025</div>
-            <p>NEW game: Dodge the squares is OUT on the Games/Tools tab! GO CHECK IT OUT!!</p>
-          </article>
-
-          <article class="blog-post">
-            <h2>uhhh, pico computer?</h2>
-            <div class="date">12/17/2025</div>
-            <p>I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though.</p>
-          </article>
-
-          <article class="blog-post">
-            <h2>First post !!!</h2>
-            <div class="date">12/16/2025</div>
-            <p>Welcome to the blog! Dont expect me to post here often.</p>
-          </article>
-        </section>
-
-        <footer>
-          &copy; Jakub 2026
-        </footer>
-      </div>
-    </div>
-
-    <div class="status-bar">Ready</div>
   </div>
 </body>
 </html>
