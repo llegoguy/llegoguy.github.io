@@ -5,90 +5,205 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Snake Game</title>
 <style>
-body { background:black; color:#00ff00; font-family:system-ui; text-align:center; }
-canvas { background:#000; display:block; margin:20px auto; border:2px solid #00ff00; }
+body { 
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 100%);
+  color:#00ff00; 
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+h1 {
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00aa00;
+  margin-bottom: 10px;
+}
+
+.game-container {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+canvas { 
+  background: linear-gradient(to bottom, #001100, #000000);
+  display: block; 
+  margin: 20px auto; 
+  border: 3px solid #00ff00;
+  border-radius: 5px;
+  box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.2), 0 0 20px rgba(0, 255, 0, 0.4);
+}
+
+.score-display {
+  font-size: 1.5em;
+  margin: 15px 0;
+  color: #00ff00;
+  text-shadow: 0 0 5px #00ff00;
+}
+
+.controls-section {
+  margin: 30px 0;
+}
 
 /* Fixed D-Pad that actually works */
 .dpad-container {
   position: relative;
   width: 150px;
   height: 150px;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   margin: 20px auto;
 }
 
 .dpad-base {
   position: absolute;
-  border-radius: 8px;
-  background: #1a1a1a;
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
   padding: 5px;
-  box-shadow: inset 0 0 10px #00ff00, 0 0 8px rgba(255, 255, 0, 0.3);
+  box-shadow: inset 0 0 15px #00ff00, 0 0 15px rgba(0, 255, 0, 0.4);
+  border: 2px solid #00ff00;
 }
 
 .dpad-button {
   position: absolute;
   width: 40px;
   height: 40px;
-  border-radius: 6px;
-  background: #0a0a0a;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%);
   color: #00ff00;
   border: 2px solid #00ff00;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   transition: all 0.1s;
   box-shadow:
     inset -2px -2px 0 #00ff00,
     inset 2px 2px 0 #003300;
+  font-weight: bold;
 }
 
 .dpad-button:hover {
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
   transform: translate(0, -2px);
+  box-shadow:
+    inset -2px -2px 0 #00ff00,
+    inset 2px 2px 0 #003300,
+    0 0 10px rgba(0, 255, 0, 0.5);
 }
 
 .dpad-button.pressed {
   transform: translate(-1px, -1px);
   box-shadow:
     inset -1px -1px 0 #00ff00,
-    inset 1px 1px 0 #003300;
+    inset 1px 1px 0 #003300,
+    0 0 15px rgba(0, 255, 0, 0.7);
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
 }
 
 /* Position buttons properly */
 .up {
   top: 5px;
-  left: 52.5px; /* (150-40)/2 = 55, but centered at 52.5 to account for shadow */
+  left: 50%;
+  transform: translateX(-50%);
 }
 .down {
   bottom: 5px;
-  left: 52.5px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .left {
-  top: 52.5px;
+  top: 50%;
   left: 5px;
+  transform: translateY(-50%);
 }
 .right {
-  top: 52.5px;
+  top: 50%;
   right: 5px;
+  transform: translateY(-50%);
+}
+
+.instructions {
+  font-size: 0.95em;
+  color: #00cc00;
+  margin: 15px 0;
+}
+
+.button-group {
+  margin-top: 20px;
+}
+
+.restart-btn {
+  padding: 10px 20px;
+  margin: 5px;
+  background: linear-gradient(135deg, #003300 0%, #001100 100%);
+  color: #00ff00;
+  border: 2px solid #00ff00;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+  transition: all 0.2s;
+}
+
+.restart-btn:hover {
+  background: linear-gradient(135deg, #005500 0%, #002200 100%);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+  transform: scale(1.05);
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 15px 0;
+  font-size: 1.2em;
+}
+
+.stat {
+  background: rgba(0, 255, 0, 0.1);
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 1px solid #00ff00;
 }
 </style>
 </head>
 <body>
-<h1>Snake Game</h1>
-<canvas id="game" width="400" height="400"></canvas>
+<div class="game-container">
+  <h1>🐍 SNAKE GAME 🐍</h1>
+  
+  <canvas id="game" width="400" height="400"></canvas>
 
-<div class="dpad-container">
-  <div class="dpad-base"></div>
-  <button class="dpad-button up" data-dir="UP">↑</button>
-  <button class="dpad-button down" data-dir="DOWN">↓</button>
-  <button class="dpad-button left" data-dir="LEFT">←</button>
-  <button class="dpad-button right" data-dir="RIGHT">→</button>
+  <div class="score-display">Score: <span id="score">0</span></div>
+  
+  <div class="stats">
+    <div class="stat">Length: <span id="length">1</span></div>
+    <div class="stat">Level: <span id="level">1</span></div>
+  </div>
+
+  <div class="controls-section">
+    <div class="instructions">Use D-pad buttons or arrow keys to move</div>
+    
+    <div class="dpad-container">
+      <div class="dpad-base"></div>
+      <button class="dpad-button up" data-dir="UP">↑</button>
+      <button class="dpad-button down" data-dir="DOWN">↓</button>
+      <button class="dpad-button left" data-dir="LEFT">←</button>
+      <button class="dpad-button right" data-dir="RIGHT">→</button>
+    </div>
+
+    <div class="button-group">
+      <button class="restart-btn" onclick="restartGame()">⟲ Restart Game</button>
+    </div>
+  </div>
 </div>
-
-<p>Use D-pad buttons or arrow keys to move</p>
 
 <script>
 const canvas = document.getElementById('game');
@@ -97,20 +212,28 @@ const ctx = canvas.getContext('2d');
 const box = 20;
 let snake = [{x: 8*box, y: 8*box}];
 let food = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)*box};
-let dir;
+let dir = 'RIGHT';
+let nextDir = 'RIGHT';
 let score = 0;
+let gameRunning = true;
+let gameSpeed = 100;
 
-// Fixed button event listeners
+// Fixed button event listeners with better touch support
 document.querySelectorAll('.dpad-button').forEach(button => {
   let isDown = false;
 
-  button.addEventListener('mousedown', e => {
-    const direction = button.getAttribute('data-dir');
+  const handleDirection = (direction) => {
     if (dir !== getOppositeDir(direction)) {
-      dir = direction;
-      button.classList.add('pressed');
-      isDown = true;
+      nextDir = direction;
     }
+  };
+
+  button.addEventListener('mousedown', e => {
+    e.preventDefault();
+    const direction = button.getAttribute('data-dir');
+    handleDirection(direction);
+    button.classList.add('pressed');
+    isDown = true;
   });
 
   button.addEventListener('mouseup', e => {
@@ -121,18 +244,32 @@ document.querySelectorAll('.dpad-button').forEach(button => {
   });
 
   button.addEventListener('mouseleave', e => {
-    if (!isDown) {
+    if (isDown) {
       button.classList.remove('pressed');
+      isDown = false;
     }
+  });
+
+  // Touch support
+  button.addEventListener('touchstart', e => {
+    e.preventDefault();
+    const direction = button.getAttribute('data-dir');
+    handleDirection(direction);
+    button.classList.add('pressed');
+  });
+
+  button.addEventListener('touchend', e => {
+    e.preventDefault();
+    button.classList.remove('pressed');
   });
 });
 
 // Keyboard controls
 document.addEventListener('keydown', e => {
-  if(e.key === 'ArrowUp' && dir !== 'DOWN') dir='UP';
-  if(e.key === 'ArrowDown' && dir !== 'UP') dir='DOWN';
-  if(e.key === 'ArrowLeft' && dir !== 'RIGHT') dir='LEFT';
-  if(e.key === 'ArrowRight' && dir !== 'LEFT') dir='RIGHT';
+  if(e.key === 'ArrowUp' && dir !== 'DOWN') { nextDir = 'UP'; e.preventDefault(); }
+  if(e.key === 'ArrowDown' && dir !== 'UP') { nextDir = 'DOWN'; e.preventDefault(); }
+  if(e.key === 'ArrowLeft' && dir !== 'RIGHT') { nextDir = 'LEFT'; e.preventDefault(); }
+  if(e.key === 'ArrowRight' && dir !== 'LEFT') { nextDir = 'RIGHT'; e.preventDefault(); }
 });
 
 function getOppositeDir(dir) {
@@ -144,32 +281,104 @@ function getOppositeDir(dir) {
   }
 }
 
-function draw() {
-  ctx.fillStyle='black';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+function updateScore() {
+  document.getElementById('score').textContent = score;
+  document.getElementById('length').textContent = snake.length;
+  document.getElementById('level').textContent = Math.floor(score / 5) + 1;
+}
 
-  // Draw snake
-  for(let i=0;i<snake.length;i++){
-    ctx.fillStyle = (i===0)? '#0f0' : '#00ff00';
-    ctx.fillRect(snake[i].x, snake[i].y, box, box);
+function drawGradientRect(x, y, width, height, color1, color2) {
+  const gradient = ctx.createLinearGradient(x, y, x + width, y + height);
+  gradient.addColorStop(0, color1);
+  gradient.addColorStop(1, color2);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(x, y, width, height);
+}
+
+function draw() {
+  if (!gameRunning) return;
+
+  // Apply next direction
+  dir = nextDir;
+
+  // Clear canvas with gradient
+  const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  bgGradient.addColorStop(0, '#001100');
+  bgGradient.addColorStop(1, '#000000');
+  ctx.fillStyle = bgGradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw grid lines for better visuals
+  ctx.strokeStyle = 'rgba(0, 255, 0, 0.05)';
+  ctx.lineWidth = 0.5;
+  for(let i = 0; i <= 20; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i * box, 0);
+    ctx.lineTo(i * box, canvas.height);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, i * box);
+    ctx.lineTo(canvas.width, i * box);
+    ctx.stroke();
   }
 
-  // Draw food
-  ctx.fillStyle='red';
-  ctx.fillRect(food.x, food.y, box, box);
+  // Draw food with glow effect
+  ctx.shadowBlur = 10;
+  ctx.shadowColor = '#ff0000';
+  ctx.fillStyle = '#ff3333';
+  ctx.beginPath();
+  ctx.arc(food.x + box/2, food.y + box/2, box/2 - 2, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Draw snake with gradient
+  for(let i = 0; i < snake.length; i++) {
+    if(i === 0) {
+      // Head - brighter green
+      ctx.fillStyle = '#00ff00';
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = '#00ff00';
+      ctx.fillRect(snake[i].x + 1, snake[i].y + 1, box - 2, box - 2);
+      // Eyes
+      ctx.fillStyle = '#000000';
+      const eyeOffset = box / 4;
+      ctx.fillRect(snake[i].x + 5, snake[i].y + 5, 3, 3);
+      ctx.fillRect(snake[i].x + 12, snake[i].y + 5, 3, 3);
+      ctx.shadowBlur = 0;
+    } else {
+      // Body - slightly darker green with gradient
+      const shade = 255 - (i * 3);
+      ctx.fillStyle = `hsl(120, 100%, ${Math.max(20, 50 - i*2)}%)`;
+      ctx.shadowBlur = 5;
+      ctx.shadowColor = '#00ff00';
+      ctx.fillRect(snake[i].x + 2, snake[i].y + 2, box - 4, box - 4);
+      ctx.shadowBlur = 0;
+    }
+  }
 
   let headX = snake[0].x;
   let headY = snake[0].y;
 
-  if(dir==='UP') headY -= box;
-  if(dir==='DOWN') headY += box;
-  if(dir==='LEFT') headX -= box;
-  if(dir==='RIGHT') headX += box;
+  if(dir === 'UP') headY -= box;
+  if(dir === 'DOWN') headY += box;
+  if(dir === 'LEFT') headX -= box;
+  if(dir === 'RIGHT') headX += box;
 
   // Check food collision
-  if(headX===food.x && headY===food.y){
+  if(headX === food.x && headY === food.y) {
     score++;
-    food = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)*box};
+    updateScore();
+    // Spawn new food that doesn't overlap with snake
+    let newFood;
+    let foodOnSnake;
+    do {
+      newFood = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)*box};
+      foodOnSnake = snake.some(seg => seg.x === newFood.x && seg.y === newFood.y);
+    } while(foodOnSnake);
+    food = newFood;
+    
+    // Increase difficulty
+    gameSpeed = Math.max(50, 100 - Math.floor(score / 5) * 5);
   } else {
     snake.pop();
   }
@@ -177,10 +386,11 @@ function draw() {
   let newHead = {x: headX, y: headY};
 
   // Check game over conditions
-  if(snake.some(seg => seg.x===headX && seg.y===headY) ||
-     headX<0 || headY<0 || headX>=canvas.width || headY>=canvas.height){
-    alert('Game Over! Score: '+score);
-    snake=[{x: 8*box, y: 8*box}]; score=0; dir=undefined;
+  if(snake.some(seg => seg.x === headX && seg.y === headY) ||
+     headX < 0 || headY < 0 || headX >= canvas.width || headY >= canvas.height) {
+    gameRunning = false;
+    alert(`Game Over!\nFinal Score: ${score}\nSnake Length: ${snake.length}\nLevel Reached: ${Math.floor(score / 5) + 1}`);
+    return;
   }
 
   snake.unshift(newHead);
@@ -196,7 +406,29 @@ function draw() {
   });
 }
 
-setInterval(draw, 100);
+function restartGame() {
+  snake = [{x: 8*box, y: 8*box}];
+  food = {x: Math.floor(Math.random()*20)*box, y: Math.floor(Math.random()*20)*box};
+  dir = 'RIGHT';
+  nextDir = 'RIGHT';
+  score = 0;
+  gameSpeed = 100;
+  gameRunning = true;
+  updateScore();
+}
+
+let gameLoop;
+function startGameLoop() {
+  clearInterval(gameLoop);
+  gameLoop = setInterval(() => {
+    if (gameRunning) {
+      draw();
+    }
+  }, gameSpeed);
+}
+
+updateScore();
+startGameLoop();
 </script>
 </body>
 </html>
