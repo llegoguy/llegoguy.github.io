@@ -63,23 +63,26 @@
     nav {
       display: flex;
       justify-content: center;
-      gap: 30px;
+      flex-wrap: wrap;
+      gap: 10px;
       background: #002200;
-      padding: 10px 0;
+      padding: 10px;
     }
 
     nav a {
       font-size: 1.1em;
+      padding: 8px 12px;
     }
 
     section {
-      padding: 40px;
+      padding: 20px;
       max-width: 900px;
       margin: auto;
     }
 
     h1, h2 {
       text-shadow: 0 0 5px #00ff00;
+      margin-top: 0;
     }
 
     .glitch {
@@ -116,17 +119,21 @@
       align-items: center;
       gap: 20px;
       flex-wrap: wrap;
+      flex-direction: column;
     }
 
     .intro-text {
-      flex: 1 1 300px;
+      flex: 1 1 100%;
+      width: 100%;
     }
 
     .intro-gif {
       display: flex;
       gap: 12px;
       align-items: center;
-      flex: 0 0 auto;
+      flex: 1 1 100%;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
     .intro-gif img {
@@ -136,12 +143,12 @@
     }
 
     .intro-gif img.profile {
-      max-width: 220px;
+      max-width: 180px;
       border-radius: 6px;
     }
 
     .intro-gif img.animation {
-      max-width: 260px;
+      max-width: 180px;
     }
 
     footer {
@@ -149,6 +156,54 @@
       padding: 20px;
       background: #001100;
       font-size: 0.9em;
+    }
+
+    /* Tablet and up */
+    @media (min-width: 768px) {
+      nav {
+        gap: 30px;
+        padding: 10px 0;
+      }
+
+      nav a {
+        padding: 0;
+        font-size: 1.1em;
+      }
+
+      section {
+        padding: 40px;
+      }
+
+      .intro-container {
+        flex-direction: row;
+      }
+
+      .intro-text {
+        flex: 1 1 300px;
+      }
+
+      .intro-gif {
+        flex: 0 0 auto;
+      }
+
+      .intro-gif img.profile {
+        max-width: 220px;
+      }
+
+      .intro-gif img.animation {
+        max-width: 260px;
+      }
+
+      header {
+        font-size: 2em;
+      }
+    }
+
+    /* Large screens */
+    @media (min-width: 1024px) {
+      header {
+        font-size: 2.5em;
+      }
     }
   </style>
 </head>
@@ -167,7 +222,8 @@
         <div class="intro-container">
           <div class="intro-text">
             <h1>Hello!</h1>
-            <p>Hey! I'm Jakub, also known as LLegoguy. I made this site for fun. I like Lego, computing, programming, gaming, mario, minecraft, video games in general and old tech! Check out all [...]</p>
+            <p>Hey! I'm Jakub, also known as LLegoguy. I made this site for fun. I like Lego, computing, programming, gaming, mario, minecraft, video games in general and old tech! Check out all [...]
+            </p>
           </div>
           <div class="intro-gif">
             <img src="bricksanim.gif" alt="lego brick animation" class="animation">
