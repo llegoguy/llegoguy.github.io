@@ -5,359 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog</title>
   <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      font-family: Tahoma, sans-serif;
-      background-color: #000000;
-      color: #00ff00;
-    }
-
-    .content {
-      flex: 1;
-      padding: 0;
-      background-color: #000000;
-      overflow: visible;
-      border: none;
-      display: block;
-      min-height: 100vh;
-    }
-
-    .xp-content {
-      margin: 0;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #000;
-      color: #00ff00;
-      overflow: auto;
-      min-height: 100vh;
-    }
-
-    .xp-content a {
-      color: #00ff00;
-      text-decoration: none;
-    }
-
-    .xp-content a:hover {
-      text-decoration: underline;
-    }
-
-    .top-banner {
-      background-color: #00aa00;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      font-weight: bold;
-    }
-
-    header {
-      background: #001100;
-      padding: 20px;
-      text-align: center;
-      font-size: 2em;
-      letter-spacing: 2px;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      background: #002200;
-      padding: 10px 0;
-    }
-
-    nav a {
-      font-size: 1.1em;
-    }
-
-    section {
-      padding: 40px;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    h1, h2 {
-      text-shadow: 0 0 5px #00ff00;
-    }
-
-    .search-container {
-      margin-bottom: 30px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .search-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .search-container label {
-      font-size: 1em;
-    }
-
-    .search-container input {
-      padding: 8px 12px;
-      background: #001100;
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 1em;
-    }
-
-    #search-input {
-      flex: 1;
-      max-width: 300px;
-    }
-
-    .date-inputs {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    #start-date, #end-date {
-      max-width: 150px;
-    }
-
-    .search-container input::placeholder {
-      color: #006600;
-    }
-
-    .search-container input:focus {
-      outline: none;
-      box-shadow: 0 0 5px #00ff00;
-    }
-
-    .search-results-count {
-      font-size: 0.9em;
-      color: #00cc00;
-    }
-
-    .blog-post {
-      margin-bottom: 40px;
-      border-bottom: 1px solid #00ff00;
-      padding-bottom: 20px;
-    }
-
-    .blog-post.hidden {
-      display: none;
-    }
-
-    .blog-post h2 {
-      margin: 0 0 10px 0;
-    }
-
-    .blog-post .date {
-      font-size: 0.9em;
-      color: #00cc00;
-      margin-bottom: 10px;
-    }
-
-    .glitch {
-      color: #00ff00;
-      position: relative;
-      display: inline-block;
-    }
-
-    .glitch::before, .glitch::after {
-      content: attr(data-text);
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0.8;
-      clip: rect(0, 900px, 0, 0);
-    }
-
-    .glitch::before {
-      animation: glitchTop 2s infinite linear alternate-reverse;
-      color: #00ff99;
-    }
-
-    .glitch::after {
-      animation: glitchBottom 2s infinite linear alternate-reverse;
-      color: #009900;
-    }
-
-    @keyframes glitchTop, glitchBottom {
-      /* Your existing keyframes */
-    }
-
-    .no-results {
-      text-align: center;
-      color: #00cc00;
-      font-size: 1.1em;
-      margin: 40px 0;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #001100;
-      font-size: 0.9em;
-    }
+    * { box-sizing: border-box; }
+    body, html { margin: 0; min-height: 100%; font-family: Tahoma, sans-serif; background: #000; color: #00ff00; }
+    .content, .xp-content { min-height: 100vh; }
+    .xp-content { font-family: 'Courier New', Courier, monospace; }
+    a { color: #00ff00; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .top-banner { background: #00aa00; color: #fff; text-align: center; padding: 10px; font-weight: bold; }
+    header { background: #001100; padding: 20px; text-align: center; font-size: 2em; letter-spacing: 2px; }
+    nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; background: #002200; padding: 10px; }
+    nav a { font-size: 1.1em; padding: 8px 12px; }
+    section { padding: 20px; max-width: 980px; margin: auto; }
+    h1, h2 { text-shadow: 0 0 5px #00ff00; }
+    .search-container { margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; }
+    .search-row, .date-inputs { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .search-container input { min-width: 0; padding: 8px 12px; background: #001100; color: #00ff00; border: 1px solid #00ff00; font: inherit; }
+    #search-input { flex: 1 1 220px; max-width: 400px; }
+    #start-date, #end-date { max-width: 170px; }
+    .search-container input::placeholder { color: #006600; }
+    .search-container input:focus { outline: none; box-shadow: 0 0 5px #00ff00; }
+    .search-results-count, .blog-post .date, .no-results { color: #00cc00; }
+    .search-results-count, .blog-post .date { font-size: .9em; }
+    .blog-post { margin-bottom: 32px; border-bottom: 1px solid #00ff00; padding-bottom: 20px; overflow-wrap: anywhere; }
+    .blog-post.hidden { display: none; }
+    .blog-post h2 { margin: 0 0 10px; }
+    .glitch { color: #00ff00; position: relative; display: inline-block; }
+    .glitch::before, .glitch::after { content: attr(data-text); position: absolute; left: 0; top: 0; opacity: .8; clip: rect(0, 900px, 0, 0); }
+    .glitch::before { animation: glitchTop 2s infinite linear alternate-reverse; color: #00ff99; }
+    .glitch::after { animation: glitchBottom 2s infinite linear alternate-reverse; color: #009900; }
+    footer { text-align: center; padding: 20px; background: #001100; font-size: .9em; }
+    button { background: #002200; color: #00ff00; border: 1px solid #00ff00; padding: 10px 15px; cursor: pointer; font: inherit; }
+    @media (min-width: 768px) { nav { gap: 30px; padding: 10px 0; } nav a { padding: 0; } section { padding: 40px; } }
+    @media (max-width: 480px) { header { font-size: 1.5em; padding: 16px 10px; letter-spacing: 1px; } .search-row, .date-inputs { align-items: stretch; } #search-input { flex-basis: 100%; max-width: none; } #start-date, #end-date { flex: 1 1 130px; max-width: none; } .search-results-count { flex-basis: 100%; } }
   </style>
 </head>
 <body>
-  <div class="content">
-    <div class="xp-content">
-      <div class="top-banner">⚡✨️ Blog ✨️⚡</div>
-
-      <header>
-        <span class="glitch" data-text="BLOG">BLOG</span>
-      </header>
-
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="page1.html">Blog</a>
-        <a href="page2.html">Downloads</a>
-        <a href="page3.html">Games/Tools</a>
-      </nav>
-
-      <section>
-        <div class="search-container">
-          <div class="search-row">
-            <label for="search-input">Search posts:</label>
-            <input 
-              type="text" 
-              id="search-input" 
-              placeholder="Enter search query..." 
-              onkeyup="filterPosts()"
-            >
-            <span class="search-results-count" id="results-count"></span>
-          </div>
-
-          <div class="date-inputs">
-            <label for="start-date">From:</label>
-            <input 
-              type="date" 
-              id="start-date" 
-              onchange="filterPosts()"
-            >
-            <label for="end-date">To:</label>
-            <input 
-              type="date" 
-              id="end-date" 
-              onchange="filterPosts()"
-            >
-            <button onclick="clearFilters()" style="background: #002200; color: #00ff00; border: 1px solid #00ff00; padding: 8px 15px; cursor: pointer; font-family: 'Courier New', Courier, monospace;">Clear Filters</button>
-          </div>
-        </div>
-
-        <div id="posts">
-          <article class="blog-post" data-date="2026-09-29">
-            <h2>a few of quality of life changes and new stuff!!</h2>
-            <div class="date">9/29/2026</div>
-            <p>added some fixes, a calculator, improved the snake game, and more!</p>
-          </article>
-          
-          <article class="blog-post" data-date="2026-09-28">
-            <h2>PAGE look UPDATE</h2>
-            <div class="date">9/28/2026</div>
-            <p>Yo every1 quick update, i removed the xp page border, it was too messy adn didnt work on mobile :/, but imo it looks cleaner now!.</p>
-          </article>
-          
-          <article class="blog-post" data-date="2026-09-18">
-            <h2>got a cardputer!</h2>
-            <div class="date">9/18/2026</div>
-            <p>Recently got an m5 cardputer ADV! pretty neat gadget IMO done a lot of useful things so far!</p>
-          </article>
-          
-          <article class="blog-post" data-date="2026-01-28">
-            <h2>New site style!!</h2>
-            <div class="date">1/28/2026</div>
-            <p>Have you seen the new windows xp inspired website border?</p>
-          </article>
-
-          <article class="blog-post" data-date="2025-12-24">
-            <h2>MERRY CHRISTMAS!</h2>
-            <div class="date">12/24/2025</div>
-            <p>Merry Christmas everyone!!!</p>
-          </article>
-
-          <article class="blog-post" data-date="2025-12-18">
-            <h2>NEW GAME!!!!1</h2>
-            <div class="date">12/18/2025</div>
-            <p>NEW game: Dodge the squares is OUT on the Games/Tools tab! GO CHECK IT OUT!!</p>
-          </article>
-
-          <article class="blog-post" data-date="2025-12-17">
-            <h2>uhhh, pico computer?</h2>
-            <div class="date">12/17/2025</div>
-            <p>I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though.</p>
-          </article>
-
-          <article class="blog-post" data-date="2025-12-16">
-            <h2>First post !!!</h2>
-            <div class="date">12/16/2025</div>
-            <p>Welcome to the blog! Dont expect me to post here often.</p>
-          </article>
-        </div>
-
-        <div class="no-results" id="no-results" style="display: none;">
-          No posts match your filters.
-        </div>
-      </section>
-
-      <footer>
-        &copy; Jakub 2026
-      </footer>
-    </div>
-  </div>
-
+  <div class="content"><div class="xp-content">
+    <div class="top-banner">⚡✨️ Blog ✨️⚡</div>
+    <header><span class="glitch" data-text="BLOG">BLOG</span></header>
+    <nav><a href="index.html">Home</a><a href="page1.html">Blog</a><a href="page2.html">Downloads</a><a href="page3.html">Games/Tools</a></nav>
+    <section>
+      <div class="search-container">
+        <div class="search-row"><label for="search-input">Search posts:</label><input type="text" id="search-input" placeholder="Enter search query..." oninput="filterPosts()"><span class="search-results-count" id="results-count"></span></div>
+        <div class="date-inputs"><label for="start-date">From:</label><input type="date" id="start-date" onchange="filterPosts()"><label for="end-date">To:</label><input type="date" id="end-date" onchange="filterPosts()"><button onclick="clearFilters()">Clear filters</button></div>
+      </div>
+      <div id="posts">
+        <article class="blog-post" data-date="2026-09-29"><h2>a few of quality of life changes and new stuff!!</h2><div class="date">9/29/2026</div><p>added some fixes, a calculator, improved the snake game, and more!</p></article>
+        <article class="blog-post" data-date="2026-09-28"><h2>PAGE look UPDATE</h2><div class="date">9/28/2026</div><p>Yo every1 quick update, i removed the xp page border, it was too messy adn didnt work on mobile :/, but imo it looks cleaner now!.</p></article>
+        <article class="blog-post" data-date="2026-09-18"><h2>got a cardputer!</h2><div class="date">9/18/2026</div><p>Recently got an m5 cardputer ADV! pretty neat gadget IMO done a lot of useful things so far!</p></article>
+        <article class="blog-post" data-date="2026-01-28"><h2>New site style!!</h2><div class="date">1/28/2026</div><p>Have you seen the new windows xp inspired website border?</p></article>
+        <article class="blog-post" data-date="2025-12-24"><h2>MERRY CHRISTMAS!</h2><div class="date">12/24/2025</div><p>Merry Christmas everyone!!!</p></article>
+        <article class="blog-post" data-date="2025-12-18"><h2>NEW GAME!!!!1</h2><div class="date">12/18/2025</div><p>NEW game: Dodge the squares is OUT on the Games/Tools tab! GO CHECK IT OUT!!</p></article>
+        <article class="blog-post" data-date="2025-12-17"><h2>uhhh, pico computer?</h2><div class="date">12/17/2025</div><p>I just ran CP/M on my raspberry pi pico. It works, but its PAINFULLY SLOW. Still counts as a $2 computer though.</p></article>
+        <article class="blog-post" data-date="2025-12-16"><h2>First post !!!</h2><div class="date">12/16/2025</div><p>Welcome to the blog! Dont expect me to post here often.</p></article>
+      </div>
+      <div class="no-results" id="no-results" style="display:none">No posts match your filters.</div>
+    </section>
+    <footer>&copy; Jakub 2026</footer>
+  </div></div>
   <script>
     function filterPosts() {
-      const searchInput = document.getElementById('search-input').value.toLowerCase();
-      const startDate = document.getElementById('start-date').value;
-      const endDate = document.getElementById('end-date').value;
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const start = document.getElementById('start-date').value;
+      const end = document.getElementById('end-date').value;
       const posts = document.querySelectorAll('.blog-post');
-      const noResults = document.getElementById('no-results');
-      let visibleCount = 0;
-
+      let count = 0;
       posts.forEach(post => {
-        const title = post.querySelector('h2').textContent.toLowerCase();
-        const content = post.textContent.toLowerCase();
-        const postDate = post.getAttribute('data-date');
-        
-        // Check text search
-        const textMatch = title.includes(searchInput) || content.includes(searchInput) || searchInput === '';
-        
-        // Check date range
-        let dateMatch = true;
-        if (startDate) {
-          dateMatch = dateMatch && postDate >= startDate;
-        }
-        if (endDate) {
-          dateMatch = dateMatch && postDate <= endDate;
-        }
-        
-        if (textMatch && dateMatch) {
-          post.classList.remove('hidden');
-          visibleCount++;
-        } else {
-          post.classList.add('hidden');
-        }
+        const date = post.dataset.date;
+        const matches = post.textContent.toLowerCase().includes(query) && (!start || date >= start) && (!end || date <= end);
+        post.classList.toggle('hidden', !matches);
+        if (matches) count++;
       });
-
-      // Show/hide "no results" message
-      if (visibleCount === 0 && (searchInput !== '' || startDate !== '' || endDate !== '')) {
-        noResults.style.display = 'block';
-      } else {
-        noResults.style.display = 'none';
-      }
-
-      // Update results count
-      const resultsCount = document.getElementById('results-count');
-      if (searchInput === '' && startDate === '' && endDate === '') {
-        resultsCount.textContent = '';
-      } else {
-        resultsCount.textContent = `(${visibleCount} result${visibleCount !== 1 ? 's' : ''})`;
-      }
+      document.getElementById('no-results').style.display = count === 0 && (query || start || end) ? 'block' : 'none';
+      document.getElementById('results-count').textContent = query || start || end ? `(${count} result${count !== 1 ? 's' : ''})` : '';
     }
-
     function clearFilters() {
       document.getElementById('search-input').value = '';
       document.getElementById('start-date').value = '';

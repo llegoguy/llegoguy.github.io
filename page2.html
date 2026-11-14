@@ -1,165 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Downloads</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-      font-family: Tahoma, sans-serif;
-      background-color: #000000;
-      color: #00ff00;
-    }
-
-    .content {
-      flex: 1;
-      padding: 0;
-      background-color: #000000;
-      overflow: visible;
-      border: none;
-      display: block;
-      min-height: 100vh;
-    }
-
-    .xp-content {
-      margin: 0;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #000;
-      color: #00ff00;
-      min-height: 100vh;
-    }
-
-    .xp-content a {
-      color: #00ff00;
-      text-decoration: none;
-    }
-
-    .xp-content a:hover {
-      text-decoration: underline;
-    }
-
-    .top-banner {
-      background-color: #00aa00;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      font-weight: bold;
-    }
-
-    header {
-      background: #001100;
-      padding: 20px;
-      text-align: center;
-      font-size: 2em;
-      letter-spacing: 2px;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      background: #002200;
-      padding: 10px 0;
-    }
-
-    nav a {
-      font-size: 1.1em;
-    }
-
-    section {
-      padding: 40px;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    h1, h2 {
-      text-shadow: 0 0 5px #00ff00;
-    }
-
-    .download {
-      margin-bottom: 20px;
-    }
-
-    .download button {
-      background: #002200;
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      padding: 8px 15px;
-      font-family: 'Courier New', Courier, monospace;
-      cursor: pointer;
-    }
-
-    .download button:hover {
-      background: #004400;
-    }
-
-    .glitch {
-      color: #00ff00;
-      position: relative;
-      display: inline-block;
-    }
-
-    .glitch::before, .glitch::after {
-      content: attr(data-text);
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0.8;
-      clip: rect(0, 900px, 0, 0);
-    }
-
-    .glitch::before {
-      animation: glitchTop 2s infinite linear alternate-reverse;
-      color: #00ff99;
-    }
-
-    .glitch::after {
-      animation: glitchBottom 2s infinite linear alternate-reverse;
-      color: #009900;
-    }
-
-    @keyframes glitchTop, glitchBottom {
-      /* Your existing keyframes */
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #001100;
-      font-size: 0.9em;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Downloads</title>
+<style>
+* { box-sizing: border-box; }
+body, html { margin: 0; min-height: 100%; font-family: Tahoma, sans-serif; background: #000; color: #00ff00; }
+.content, .xp-content { min-height: 100vh; }
+.xp-content { font-family: 'Courier New', Courier, monospace; }
+a { color: #00ff00; text-decoration: none; } a:hover { text-decoration: underline; }
+.top-banner { background: #00aa00; color: #fff; text-align: center; padding: 10px; font-weight: bold; }
+header { background: #001100; padding: 20px; text-align: center; font-size: 2em; letter-spacing: 2px; }
+nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; background: #002200; padding: 10px; }
+nav a { font-size: 1.1em; padding: 8px 12px; }
+section { padding: 20px; max-width: 980px; margin: auto; }
+h1, h2 { text-shadow: 0 0 5px #00ff00; }
+.download { margin-bottom: 20px; overflow-wrap: anywhere; }
+.download button { background: #002200; color: #00ff00; border: 1px solid #00ff00; padding: 10px 15px; font: inherit; cursor: pointer; }
+.download button:hover { background: #004400; }
+.glitch { color: #00ff00; position: relative; display: inline-block; }
+.glitch::before, .glitch::after { content: attr(data-text); position: absolute; left: 0; top: 0; opacity: .8; clip: rect(0, 900px, 0, 0); }
+.glitch::before { animation: glitchTop 2s infinite linear alternate-reverse; color: #00ff99; }
+.glitch::after { animation: glitchBottom 2s infinite linear alternate-reverse; color: #009900; }
+footer { text-align: center; padding: 20px; background: #001100; font-size: .9em; }
+@media (min-width: 768px) { nav { gap: 30px; padding: 10px 0; } nav a { padding: 0; } section { padding: 40px; } }
+@media (max-width: 480px) { header { font-size: 1.5em; padding: 16px 10px; letter-spacing: 1px; } }
+</style>
 </head>
-<body>
-  <div class="content">
-    <div class="xp-content">
-      <div class="top-banner">⚡✨️ Downloads ✨️⚡</div>
-
-      <header>
-        <span class="glitch" data-text="DOWNLOADS">DOWNLOADS</span>
-      </header>
-
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="page1.html">Blog</a>
-        <a href="page2.html">Downloads</a>
-        <a href="page3.html">Games/Tools</a>
-      </nav>
-
-      <section>
-        <div class="download">
-          <p>Lego technic gun instructions</p>
-          <button onclick="window.location.href='downloads/lego_technic_gun.zip'">Download</button>
-        </div>
-      </section>
-
-      <footer>
-        &copy; Jakub 2026
-      </footer>
-    </div>
-  </div>
-</body>
+<body><div class="content"><div class="xp-content">
+<div class="top-banner">⚡✨️ Downloads ✨️⚡</div>
+<header><span class="glitch" data-text="DOWNLOADS">DOWNLOADS</span></header>
+<nav><a href="index.html">Home</a><a href="page1.html">Blog</a><a href="page2.html">Downloads</a><a href="page3.html">Games/Tools</a></nav>
+<section><div class="download"><p>Lego technic gun instructions</p><button onclick="window.location.href='downloads/lego_technic_gun.zip'">Download</button></div></section>
+<footer>&copy; Jakub 2026</footer>
+</div></div></body>
 </html>

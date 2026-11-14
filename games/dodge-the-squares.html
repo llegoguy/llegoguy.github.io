@@ -1,253 +1,36 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Dodge the Squares – ABSURD MODE</title>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dodge the Squares – ABSURD MODE</title>
 <style>
-  body {
-    margin: 0;
-    background: black;
-    color: white;
-    font-family: monospace;
-    text-align: center;
-  }
-  canvas {
-    display: block;
-    margin: 10px auto;
-    background: #080808;
-    border: 3px solid #400;
-  }
-
-  /* NEW STUFF: BUTTONS */
-  .button-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 15px auto;
-  }
-  .button {
-    background: #2a2a2a;
-    color: white;
-    border: 2px solid dodgerblue;
-    padding: 10px 20px;
-    font-family: monospace;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .button:hover {
-    background: #3a3a3a;
-  }
-  .button.active {
-    background: dodgerblue;
-    color: black;
-  }
-</style>
-</head>
-<body>
-
-<h1>☠ DODGE THE SQUARES ☠</h1>
-<p>← → / A D to move | SHIFT to dash | Survive (lol)</p>
-<canvas id="game" width="420" height="520"></canvas>
-<div class="button-container">
-  <button class="button left" data-key="ArrowLeft">←</button>
-  <button class="button right" data-key="ArrowRight">→</button>
-  <button class="button dash" data-key="Shift">DASH (SHIFT)</button>
-</div>
-<p id="hud"></p>
-
+* { box-sizing: border-box; } body { margin: 0; padding: 12px; background: black; color: white; font-family: monospace; text-align: center; }
+h1 { font-size: clamp(1.4rem, 6vw, 2rem); } p { overflow-wrap: anywhere; }
+canvas { display: block; width: min(420px, 100%); height: auto; margin: 10px auto; background: #080808; border: 3px solid #400; }
+.button-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 15px auto; }
+.button { background: #2a2a2a; color: white; border: 2px solid dodgerblue; padding: 12px 18px; min-height: 48px; font: inherit; cursor: pointer; transition: background .2s; touch-action: none; }
+.button:hover { background: #3a3a3a; } .button.active { background: dodgerblue; color: black; }
+</style></head><body>
+<h1>☠ DODGE THE SQUARES ☠</h1><p>← → / A D to move | SHIFT to dash | Survive (lol)</p><canvas id="game" width="420" height="520"></canvas>
+<div class="button-container"><button class="button left" data-key="ArrowLeft">←</button><button class="button right" data-key="ArrowRight">→</button><button class="button dash" data-key="Shift">DASH (SHIFT)</button></div><p id="hud"></p>
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-let keys = {};
-document.addEventListener("keydown", e => keys[e.key] = true);
-document.addEventListener("keyup", e => keys[e.key] = false);
-
-// NEW: Handle button clicks
-document.querySelectorAll('.button').forEach(button => {
-  button.addEventListener('mousedown', () => {
-    const key = button.getAttribute('data-key');
-    if (key === 'Shift') {
-      // Simulate Shift key press/release with a tiny delay to avoid holding
-      keys[key] = true;
-      setTimeout(() => delete keys[key], 50);
-    } else {
-      keys[key] = true;
-    }
-  });
-  button.addEventListener('mouseup', () => {
-    const key = button.getAttribute('data-key');
-    if (key !== 'Shift') {
-      delete keys[key];
-    }
-  });
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d'); let keys={};
+document.addEventListener('keydown',e=>keys[e.key]=true); document.addEventListener('keyup',e=>keys[e.key]=false);
+document.querySelectorAll('.button').forEach(button=>{
+  const key=button.dataset.key;
+  button.addEventListener('pointerdown',e=>{e.preventDefault();keys[key]=true;button.classList.add('active');button.setPointerCapture(e.pointerId);});
+  ['pointerup','pointercancel','lostpointercapture'].forEach(event=>button.addEventListener(event,()=>{keys[key]=false;button.classList.remove('active');}));
 });
-
-let score = 0;
-let difficulty = 1;
-let gameOver = false;
-let shake = 0;
-
-const player = {
-  x: 200,
-  y: 470,
-  size: 18,
-  speed: 5,
-  dashCooldown: 0
-};
-
-let enemies = [];
-let lasers = [];
-let arena = 0;
-
-function spawnEnemy() {
-  const type = Math.random();
-  enemies.push({
-    x: Math.random() * (canvas.width - 20),
-    y: -20,
-    size: 16,
-    speed: 2 + difficulty * 0.4,
-    homing: type < 0.35
-  });
+let score=0,difficulty=1,gameOver=false,shake=0; const player={x:200,y:470,size:18,speed:5,dashCooldown:0}; let enemies=[],lasers=[],arena=0;
+function spawnEnemy(){const type=Math.random();enemies.push({x:Math.random()*(canvas.width-20),y:-20,size:16,speed:2+difficulty*.4,homing:type<.35});}
+function spawnLaser(){lasers.push({x:Math.random()*canvas.width,timer:60});}
+function update(){if(gameOver)return; difficulty+=.003; arena=Math.min(80,difficulty*4); score++; const left=arena,right=canvas.width-player.size-arena;
+ const moveLeft=(keys.ArrowLeft||keys.a)&&!gameOver,moveRight=(keys.ArrowRight||keys.d)&&!gameOver;
+ if(moveLeft&&player.x>left)player.x-=player.speed; if(moveRight&&player.x<right)player.x+=player.speed;
+ document.querySelectorAll('.button').forEach(button=>{if(button.dataset.key!=='Shift')button.classList.toggle('active',button.dataset.key==='ArrowLeft'?moveLeft:moveRight);});
+ if((keys.Shift||keys[' '])&&player.dashCooldown<=0){player.x+=(moveLeft?-1:moveRight?1:0)*80;player.dashCooldown=120;} if(player.dashCooldown>0)player.dashCooldown--;
+ for(const e of enemies){if(e.homing)e.x+=Math.sign(player.x-e.x)*1.5;e.y+=e.speed;if(player.x<e.x+e.size&&player.x+player.size>e.x&&player.y<e.y+e.size&&player.y+player.size>e.y)gameOver=true;if(Math.abs(player.y-e.y)<10)shake=8;}
+ enemies=enemies.filter(e=>e.y<canvas.height+50); for(const l of lasers){l.timer--;if(l.timer===0&&Math.abs(player.x-l.x)<10)gameOver=true;} lasers=lasers.filter(l=>l.timer>-20);
 }
-
-function spawnLaser() {
-  const x = Math.random() * canvas.width;
-  lasers.push({ x, timer: 60 });
-}
-
-function update() {
-  if (gameOver) return;
-
-  difficulty += 0.003;
-  arena = Math.min(80, difficulty * 4);
-  score++;
-
-  let left = arena;
-  let right = canvas.width - player.size - arena;
-
-  // NEW: Handle both keyboard and button input
-  const moveLeft = (keys["ArrowLeft"] || keys["a"]) && !gameOver;
-  const moveRight = (keys["ArrowRight"] || keys["d"]) && !gameOver;
-
-  if (moveLeft && player.x > left) {
-    player.x -= player.speed;
-  }
-  if (moveRight && player.x < right) {
-    player.x += player.speed;
-  }
-
-  // Update button states
-  document.querySelectorAll('.button').forEach(button => {
-    const active = button.classList.contains('left') ? moveLeft :
-                   button.classList.contains('right') ? moveRight : false;
-    if (active) {
-      button.classList.add('active');
-    } else {
-      button.classList.remove('active');
-    }
-  });
-
-  // DASH
-  if ((keys["Shift"] || keys[" "]) && player.dashCooldown <= 0) { // Added spacebar for fun
-    player.x += (moveLeft ? -1 : moveRight ? 1 : 0) * 80;
-    player.dashCooldown = 120;
-
-    // Visual feedback for dash button
-    const dashBtn = document.querySelector('.dash');
-    dashBtn.classList.add('active');
-    setTimeout(() => dashBtn.classList.remove('active'), 50);
-  }
-  if (player.dashCooldown > 0) player.dashCooldown--;
-
-  // Enemies
-  for (let e of enemies) {
-    if (e.homing) {
-      e.x += Math.sign(player.x - e.x) * 1.5;
-    }
-    e.y += e.speed;
-
-    if (
-      player.x < e.x + e.size &&
-      player.x + player.size > e.x &&
-      player.y < e.y + e.size &&
-      player.y + player.size > e.y
-    ) gameOver = true;
-
-    if (Math.abs(player.y - e.y) < 10) shake = 8;
-  }
-
-  enemies = enemies.filter(e => e.y < canvas.height + 50);
-
-  // Lasers
-  for (let l of lasers) {
-    l.timer--;
-    if (l.timer === 0) {
-      if (Math.abs(player.x - l.x) < 10) gameOver = true;
-    }
-  }
-  lasers = lasers.filter(l => l.timer > -20);
-}
-
-function draw() {
-  ctx.save();
-  if (shake > 0) {
-    ctx.translate(Math.random()*shake, Math.random()*shake);
-    shake--;
-  }
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Arena walls
-  ctx.fillStyle = "#220000";
-  ctx.fillRect(0, 0, arena, canvas.height);
-  ctx.fillRect(canvas.width - arena, 0, arena, canvas.height);
-
-  // Player
-  ctx.fillStyle = "dodgerblue";
-  ctx.fillRect(player.x, player.y, player.size, player.size);
-
-  // Enemies
-  for (let e of enemies) {
-    ctx.fillStyle = e.homing ? "orange" : "red";
-    ctx.fillRect(e.x, e.y, e.size, e.size);
-  }
-
-  // Lasers
-  for (let l of lasers) {
-    ctx.strokeStyle = l.timer > 0 ? "yellow" : "red";
-    ctx.beginPath();
-    ctx.moveTo(l.x, 0);
-    ctx.lineTo(l.x, canvas.height);
-    ctx.stroke();
-  }
-
-  if (gameOver) {
-    ctx.fillStyle = "white";
-    ctx.font = "32px monospace";
-    ctx.fillText("NOPE.", 160, 250);
-  }
-
-  ctx.restore();
-
-  document.getElementById("hud").textContent =
-    `Score: ${score} | Difficulty: ${difficulty.toFixed(1)} | Dash CD: ${player.dashCooldown}`;
-}
-
-setInterval(() => {
-  if (!gameOver) {
-    spawnEnemy();
-    if (difficulty > 5) spawnEnemy();
-    if (difficulty > 7 && Math.random() < 0.3) spawnLaser();
-  }
-}, 600);
-
-function loop() {
-  update();
-  draw();
-  requestAnimationFrame(loop);
-}
-loop();
-</script>
-
-</body>
-</html>
+function draw(){ctx.save();if(shake>0){ctx.translate(Math.random()*shake,Math.random()*shake);shake--;}ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#220000';ctx.fillRect(0,0,arena,canvas.height);ctx.fillRect(canvas.width-arena,0,arena,canvas.height);ctx.fillStyle='dodgerblue';ctx.fillRect(player.x,player.y,player.size,player.size);
+ for(const e of enemies){ctx.fillStyle=e.homing?'orange':'red';ctx.fillRect(e.x,e.y,e.size,e.size);}for(const l of lasers){ctx.strokeStyle=l.timer>0?'yellow':'red';ctx.beginPath();ctx.moveTo(l.x,0);ctx.lineTo(l.x,canvas.height);ctx.stroke();}if(gameOver){ctx.fillStyle='white';ctx.font='32px monospace';ctx.fillText('NOPE.',160,250);}ctx.restore();document.getElementById('hud').textContent=`Score: ${score} | Difficulty: ${difficulty.toFixed(1)} | Dash CD: ${player.dashCooldown}`;}
+setInterval(()=>{if(!gameOver){spawnEnemy();if(difficulty>5)spawnEnemy();if(difficulty>7&&Math.random()<.3)spawnLaser();}},600);
+function loop(){update();draw();requestAnimationFrame(loop);}loop();
+</script></body></html>
