@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Geometric Shapes</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <script type="importMap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+
+        // Scene Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 3;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Geometry Definitions (using EdgesGeometry for clean frames)
+        const getEdges = (geo) => new THREE.EdgesGeometry(geo);
+
+        const geoList = [
+            getEdges(new THREE.BoxGeometry(1.2, 1.2, 1.2)),       // Cube
+            getEdges(new THREE.TetrahedronGeometry(1.3)),         // Tetrahedron
+            getEdges(new THREE.DodecahedronGeometry(1.2))          // Dodecahedron
+        ];
+
+        // Material setup - "just colored frames without insides"
+        let currentMaterial = new THREE.LineBasicMaterial({
+            color: 0xff0000,
+        });
+
+        let currentMesh = new THREE.LineSegments(geoList[0], currentMaterial);
+        scene.add(currentMesh);
+
+
+        // State variables for cycling
+        const colors = [0xff0000, 0x00ff00, 0x0000ff]; // Red, Green, Blue
+        let colorIndex = 0;
+        let geometryIndex = 0;
+
+        // Update Color every 1 second
+        setInterval(() => {
+            currentMaterial.color.setHex(colors[colorIndex]);
+            colorIndex = (colorIndex + 1) % colors.length;
+        }, 1000);
+
+        // Update Geometry every 3 seconds
+        setInterval(() => {
+            const oldGeo = currentMesh.geometry;
+            currentMesh.geometry = geoList[geometryIndex];
+            if (oldGeo) oldGeo.dispose();
+
+            geometryIndex = (geometryIndex + 1) % geoList.length;
+        }, 3000);
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotate the mesh
+            currentMesh.rotation.x += 0.01;
+            currentMesh.rotation.y += 0.01;
+            currentMesh.rotation.z += 0.005;
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle Window Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
